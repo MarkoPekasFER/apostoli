@@ -36,9 +36,9 @@ pnpm run dev
 ```
 
 ## Članovi tima 
-> Marko Pekas (Project Manager)
-> Nino Salai
-> Dominik Karuc
+> Marko Pekas (Project Manager)  
+> Nino Salai  
+> Dominik Karuc  
 
 ## Kontribucije
 Pravila su izdvojena u `CONTRIBUTING.md`.
