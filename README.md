@@ -37,6 +37,7 @@ pnpm run dev
 
 ## Članovi tima 
 > Marko Pekas
+> Nino Salai
 
 ## Kontribucije
 Pravila su izdvojena u `CONTRIBUTING.md`.
