@@ -36,7 +36,7 @@ pnpm run dev
 ```
 
 ## Članovi tima 
-> Marko Pekas
+> Marko Pekas (Project Manager)
 > Nino Salai
 
 ## Kontribucije
