@@ -41,6 +41,7 @@ pnpm run dev
 > Dominik Karuc
 > Fran Rajčević
 > Vanja Gretić
+> David Kresović
 
 ## Kontribucije
 Pravila su izdvojena u `CONTRIBUTING.md`.
