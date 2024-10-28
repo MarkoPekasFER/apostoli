@@ -42,6 +42,7 @@ pnpm run dev
 > Fran Rajčević
 > Vanja Gretić
 > David Kresović
+> Vito Zorić
 
 ## Kontribucije
 Pravila su izdvojena u `CONTRIBUTING.md`.
