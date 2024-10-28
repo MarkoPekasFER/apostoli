@@ -39,7 +39,8 @@ pnpm run dev
 > Marko Pekas (Project Manager)  
 > Nino Salai (backend)  
 > Dominik Karuc
-> Fran Rajčević 
+> Fran Rajčević
+> Vanja Gretić
 
 ## Kontribucije
 Pravila su izdvojena u `CONTRIBUTING.md`.
