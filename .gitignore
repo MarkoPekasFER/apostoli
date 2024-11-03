@@ -7,3 +7,5 @@
 
 # Ignore dotenv files
 **/.env
+./frontend/.env
+./backend/.env
