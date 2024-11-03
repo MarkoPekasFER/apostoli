@@ -1,4 +1,4 @@
-# Unlucky 🫠 - Projekt Za Prirodne Katastrofe
+# Unlucky 😬 - Projekt Za Prirodne Katastrofe
 
 ## Opis projekta
 Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
@@ -38,7 +38,7 @@ pnpm run dev
 ## Članovi tima 
 > Marko Pekas (Project Manager)  
 > Nino Salai (backend)  
-> Dominik Karuc
+> Dominik Karuc  
 > Fran Rajčević  
 > Vanja Gretić  
 > David Kresović  
