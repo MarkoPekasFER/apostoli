@@ -10,6 +10,7 @@ const origin = {
   lat: 45.803016,
   lng: 15.978817,
 };
+
 const nightModeMapStyles = [
   { elementType: "geometry", stylers: [{ color: "#1c1f2a" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#1c1f2a" }] },
@@ -91,7 +92,6 @@ const nightModeMapStyles = [
   },
 ];
 
-
 const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
@@ -103,10 +103,9 @@ const defaultMapOptions = {
       elementType: "labels",
       stylers: [{ visibility: "off" }],
     },
-    // ...nightModeMapStyles,
+    ...nightModeMapStyles,
   ],
 };
-
 
 const GoogleMapParent = () => {
   const [locations, setLocations] = React.useState<any[]>([]);
@@ -117,8 +116,10 @@ const GoogleMapParent = () => {
       const locations = await res.json();
       return locations;
     };
-    setTimeout(() => fetchLocations().then((locations) => setLocations(locations)), 1000);
-    
+    setTimeout(
+      () => fetchLocations().then((locations) => setLocations(locations)),
+      1000
+    );
   }, []);
 
   const handleMarkerClick = (e: any) => {
@@ -129,6 +130,16 @@ const GoogleMapParent = () => {
 
     console.log(name);
   };
+  
+  const fireIcon = {
+    url: "https://cdn-icons-png.freepik.com/256/1066/1066232.png?semt=ais_hybrid", // URL to the custom fire image
+    scaledSize: {
+      "width": 40,
+      "height": 40
+    },
+  };
+
+
   return (
     <LoadScript
       googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
@@ -144,6 +155,7 @@ const GoogleMapParent = () => {
             key={index}
             position={location}
             onClick={(e) => handleMarkerClick(e)}
+            icon={fireIcon}
           />
         ))}
       </GoogleMap>

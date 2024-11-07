@@ -34,10 +34,23 @@ function Login() {
           <form>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Input id="email" type="email" placeholder="Email" />
+                <Input id="name" placeholder="Ime" />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Input id="password" type="password" placeholder="Sifra" />
+                <Input id="last_name" placeholder="Prezime" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Input id="email" type="email" placeholder="Vas email" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Input id="password" type="password" placeholder="Vasa sifra" />
+              </div>
+              <div className="flex flex-col space-y-1.5">
+                <Input
+                  id="repeat_password"
+                  type="password"
+                  placeholder="Ponovite sifru"
+                />
               </div>
             </div>
           </form>
@@ -46,9 +59,9 @@ function Login() {
           </div>
           <div className="pt-4">
             <p className="text-sm text-center">
-              Nemate korisnicki racun?{" "}
-              <Link href="/register" className="text-blue-500">
-                Registriraj se
+              Vec imate racun?{" "}
+              <Link href="/login" className="text-blue-500">
+                Prijavite se
               </Link>
             </p>
           </div>
