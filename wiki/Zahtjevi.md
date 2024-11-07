@@ -1,6 +1,6 @@
 ﻿|ID zahtjeva|Opis|Prioritet|Izvor|Kriterij Prihvaćenja|
 | :-: | :-: | :-: | :-: | :-: |
-|FZ-01|Korisnik se može prijaviti na sustav pomoću korisničkog imena i lozinke ili preko Google računa.|Visok|Zahtjev dionika|Korisnik može unijeti valjano korisničko ime i lozinku te se uspješno prijaviti u sustav.|
+|FZ-01|Sustav omogućava prijavu na sustav pomoću korisničkog imena i lozinke ili preko Google računa.|Visok|Zahtjev dionika|Korisnik može unijeti valjano korisničko ime i lozinku te se uspješno prijaviti u sustav.|
 |FZ-02|Korisnik može koristiti sustav anonimno bez registracije za određene funkcionalnosti.|Srednji|Zahtjev dionika|Anonimni korisnici mogu pristupiti funkcionalnostima kao što su pregled nesreća i sigurnosnih smjernica.|
 |FZ-03|Korisnik može vidjeti sve potvrđene nesreće u svojoj blizini i pregledati detaljne informacije o nesreći.|Visok|Povratne informacije korisnika|Korisnik može pregledati listu nesreća u radijusu od 5 km od svoje lokacije s detaljima o vremenu, mjestu i opisu nesreće.|
 |FZ-04|Korisnik može pristupiti uputama i sigurnosnim smjernicama unutar aplikacije.|Srednji|Dokument zahtjeva|Korisnik može vidjeti sigurnosne upute i smjernice unutar aplikacije, sortirane prema vrsti nesreće.|
