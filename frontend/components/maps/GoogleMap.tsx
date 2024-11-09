@@ -131,11 +131,11 @@ const GoogleMapParent = () => {
     console.log(name);
   };
   
-  const fireIcon = {
+  const fireIcon: any = {
     url: "https://cdn-icons-png.freepik.com/256/1066/1066232.png?semt=ais_hybrid", // URL to the custom fire image
     scaledSize: {
       "width": 40,
-      "height": 40
+      "height": 40,
     },
   };
 
