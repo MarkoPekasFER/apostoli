@@ -28,11 +28,14 @@ public class User {
     @Column(nullable = false)
     private String email;
 
+    public Role role;
+
     public User(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
+
 
     @Override
     public String toString() {
@@ -41,7 +44,7 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", role=" + role +
                 '}';
     }
-
 }
