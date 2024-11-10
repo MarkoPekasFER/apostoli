@@ -15,9 +15,12 @@ import lombok.Setter;
 public class UserRoles {
 
     // Users and their roles.
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
 
     @JoinColumn(name = "role_id")
-    private Long id;
+    private Long roleId;
     @JoinColumn(name = "email")
     private String email;
 
