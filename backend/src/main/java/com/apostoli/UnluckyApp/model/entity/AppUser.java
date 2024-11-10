@@ -1,10 +1,9 @@
 package com.apostoli.UnluckyApp.model.entity;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
+
+import java.util.List;
 
 @Entity
 @Table(name = "users")
@@ -12,27 +11,27 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class User {
+public class AppUser{
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+   // @Column(nullable = false)
     private String email;
 
-    public User(String username, String password, String email) {
+    public AppUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
+
 
     @Override
     public String toString() {
@@ -43,5 +42,7 @@ public class User {
                 ", email='" + email + '\'' +
                 '}';
     }
+    @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
+    private List<Role> roles;
 
 }
