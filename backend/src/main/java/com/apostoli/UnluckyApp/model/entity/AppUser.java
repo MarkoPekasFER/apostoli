@@ -6,31 +6,30 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Table(name = "users")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-
-public class User {
+public class AppUser {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
+   // @Column(nullable = false)
     private String email;
 
-    public Role role;
-
-    public User(String username, String password, String email) {
+    public AppUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
@@ -44,7 +43,9 @@ public class User {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
-                ", role=" + role +
                 '}';
     }
+    @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
+    private List<Role> roles;
+
 }

@@ -27,6 +27,8 @@ public class Shelter {
     @JoinColumn(name = "location_id")
     private Location location;
 
+    @ManyToOne
+    @JoinColumn(name = "city_id")
     private City city;
 
 }

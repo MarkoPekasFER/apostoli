@@ -30,7 +30,8 @@ public class Report {
     @Column(nullable = false)
     private DisasterType disasterType;
 
-    @Column(nullable = false)
+    @ManyToOne
+    @JoinColumn(name = "location_id", nullable = false)
     private Location location;
 
     @Column(nullable = false)
@@ -40,13 +41,15 @@ public class Report {
 
     private ReportStatus status;
 
-    private User user;
+    @ManyToOne
+    @JoinColumn(name = "user_id", nullable = false)
+    private AppUser user;
 
     @OneToMany(mappedBy = "report",cascade = CascadeType.ALL)
     private List<Photo> photos = new ArrayList<>();
 
 
-    public Report(Long id, DisasterType disasterType, Location location, LocalDateTime reportTime, String description, User user, List<Photo> photos) {
+    public Report(Long id, DisasterType disasterType, Location location, LocalDateTime reportTime, String description, AppUser user, List<Photo> photos) {
         this.id = id;
         this.disasterType = disasterType;
         this.location = location;
