@@ -26,6 +26,7 @@ public class Location {
     @Column(nullable = false)
     private Double longitude;
 
+    @ManyToOne
     private City city;
 
 
