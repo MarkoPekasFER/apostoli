@@ -53,13 +53,13 @@ function UserIcon() {
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings />
-            <span>Postavke</span>
+            <Link href="/settings/profile/">Postavke</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />
         <DropdownMenuItem>
           <LifeBuoy />
-          <span>Podrska</span>
+          <Link href="/settings/support/">Podrška</Link>
         </DropdownMenuItem>
         <DropdownMenuItem disabled>
           <Cloud />
