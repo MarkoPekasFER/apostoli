@@ -1,7 +1,9 @@
 # Unlucky 😬 - Projekt Za Prirodne Katastrofe
 
 ## Opis projekta
-Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu. 
+Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Programsko inženjerstvo](https://www.fer.unizg.hr/predmet/proinz) na Fakultetu elektrotehnike i računarstva Sveučilišta u Zagrebu.
+
+Deployment se nalazi na [apostoli.markopekas.com](https://apostoli.markopekas.com)
 
 Ovaj projekt će omogućiti bolju komunikaciju između građana i hitnih službi te poboljšati brzinu reakcije u kriznim situacijama. Aplikacija će osigurati pravovremene informacije i koordinaciju akcija u stvarnom vremenu.
 
