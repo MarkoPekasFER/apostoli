@@ -3,7 +3,12 @@ package com.apostoli.UnluckyApp.controller;
 import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.service.AppUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/v1/user")
@@ -17,8 +22,13 @@ public class AppUserController {
     }
 
     @PostMapping("/register")
-    public AppUser registerUser(@RequestBody AppUser user) {
-        return userService.registerUser(user);
+    public ResponseEntity<String> registerUser(@RequestBody AppUser user) {
+        Optional<AppUser> existingUser = userService.fetchUserInfoByUsername(user.getUsername());
+        if (existingUser.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+        }
+        userService.registerUser(user);
+        return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
 
     @PostMapping("/login")
@@ -27,8 +37,11 @@ public class AppUserController {
     }
 
     @GetMapping("/profile")
-    public String getProfile() {
-        return "Profile information";
+    public Optional<AppUser> getUserProfile(Principal principal) {
+        String username = principal.getName();
+        return userService.fetchUserInfoByUsername(username);
     }
 
-}
+
+
+    }
