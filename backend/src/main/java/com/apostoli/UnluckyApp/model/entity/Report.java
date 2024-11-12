@@ -59,9 +59,14 @@ public class Report {
         this.photos = photos;
     }
 
-    //adding a new photo
-    public void addPhoto(Photo photo){
-        photos.add(photo);
+    public Report(Long id, DisasterType disasterType, Location location, LocalDateTime reportTime, String description, List<Photo> photos) {
+        this.id = id;
+        this.disasterType = disasterType;
+        this.location = location;
+        this.reportTime = reportTime;
+        this.description = description;
+        this.photos = photos;
     }
+
 
 }
