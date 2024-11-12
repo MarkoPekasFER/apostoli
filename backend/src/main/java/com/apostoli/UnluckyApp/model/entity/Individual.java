@@ -12,21 +12,25 @@ import lombok.Setter;
 @Entity
 @Getter
 @Setter
-@NoArgsConstructor
 @AllArgsConstructor
+@NoArgsConstructor
 
-public class City {
+public class Individual {
 
+    // Personal data about registered users
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String name;
+    private String email;
+    private String firstName;
+    private String lastName;
+    private Long OIB;
 
-    private String zipCode;
-
-    public City(String name, String zipCode) {
-        this.name = name;
-        this.zipCode = zipCode;
+    public Individual(String email, String firstName, String lastName, Long OIB) {
+        this.email = email;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.OIB = OIB;
     }
 }
