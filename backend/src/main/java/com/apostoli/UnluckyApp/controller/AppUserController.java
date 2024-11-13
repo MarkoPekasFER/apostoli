@@ -42,7 +42,6 @@ public class AppUserController {
 
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
-
         return userService.verify(user);
     }
 
@@ -52,7 +51,6 @@ public class AppUserController {
         return userService.fetchUserInfoByUsername(username);
     }
 
-    
 
 
 

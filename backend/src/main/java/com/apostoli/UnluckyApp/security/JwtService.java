@@ -1,5 +1,6 @@
 package com.apostoli.UnluckyApp.security;
 
+import com.apostoli.UnluckyApp.model.entity.Role;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
@@ -9,6 +10,8 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import javax.crypto.spec.SecretKeySpec;
 import java.util.Date;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class JwtService {
@@ -22,14 +25,14 @@ public class JwtService {
 
 
 
-    public String generateToken(String username) {
+    public String generateToken(String username, List<Role> role) {
 
 
         return Jwts.builder()
                 .setIssuer(ISSUER)
                 .setSubject(username)
                 .claim("username", username)
-               // .claim("roles", role.stream().map(roles -> roles.getName().name()).collect(Collectors.toList()))
+                .claim("roles", role.stream().map(roles -> roles.getName().name()).collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //24 Hours
                 .signWith(getSigningKey())

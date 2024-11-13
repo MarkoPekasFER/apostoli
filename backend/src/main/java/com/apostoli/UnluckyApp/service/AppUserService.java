@@ -1,6 +1,8 @@
 package com.apostoli.UnluckyApp.service;
 
 import com.apostoli.UnluckyApp.model.entity.AppUser;
+import com.apostoli.UnluckyApp.model.entity.Role;
+import com.apostoli.UnluckyApp.model.enums.RoleType;
 import com.apostoli.UnluckyApp.repository.AppUserRepository;
 import com.apostoli.UnluckyApp.security.JwtService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,17 +27,22 @@ public class AppUserService {
 
     private final AuthenticationManager authManager;
 
+    private final RoleService roleService;
 
     @Autowired
-    public AppUserService(AppUserRepository userRepository, JwtService jwtService, AuthenticationManager authManager) {
+    public AppUserService(AppUserRepository userRepository, JwtService jwtService, AuthenticationManager authManager, RoleService roleService) {
         this.userRepository = userRepository;
         this.jwtService = jwtService;
         this.authManager = authManager;
+        this.roleService = roleService;
         this.encoder = new BCryptPasswordEncoder(13);
     }
 
     public void registerUser(AppUser user) {
         user.setPassword(encoder.encode(user.getPassword()));
+        roleService.createRoleIfNotFound(RoleType.USER);
+        Role userRole = roleService.findByName(RoleType.USER);
+        user.setRoles(Collections.singletonList(userRole));
         userRepository.save(user);
     }
 
@@ -56,9 +64,11 @@ public class AppUserService {
     public String verify(AppUser user) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (authentication.isAuthenticated()) {
-            return jwtService.generateToken(user.getUsername());
+            return jwtService.generateToken(user.getUsername(), userRepository.findByUsername(user.getUsername()).get().getRoles());
         } else {
             return "fail";
         }
     }
+
+
 }
