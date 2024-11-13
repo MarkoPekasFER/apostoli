@@ -23,16 +23,26 @@ public class AppUserController {
 
     @PostMapping("/register")
     public ResponseEntity<String> registerUser(@RequestBody AppUser user) {
-        Optional<AppUser> existingUser = userService.fetchUserInfoByUsername(user.getUsername());
-        if (existingUser.isPresent()) {
-            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already exists");
+        Optional<AppUser> existingUserByUsername = userService.fetchUserInfoByUsername(user.getUsername());
+        Optional<AppUser> existingUserByEmail = userService.fetchUserInfoByEmail(user.getEmail());
+
+        if (existingUserByUsername.isPresent() && existingUserByEmail.isPresent()){
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username and Email already in use");
         }
+        if (existingUserByUsername.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Username already in use");
+        }
+        if (existingUserByEmail.isPresent()) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
+        }
+
         userService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
 
     @PostMapping("/login")
     public String login(@RequestBody AppUser user) {
+
         return userService.verify(user);
     }
 

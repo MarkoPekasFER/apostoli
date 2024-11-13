@@ -3,10 +3,8 @@ package com.apostoli.UnluckyApp.model.entity;
 import com.apostoli.UnluckyApp.model.enums.DisasterType;
 import com.apostoli.UnluckyApp.model.enums.ReportStatus;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -19,7 +17,7 @@ import java.util.List;
 @AllArgsConstructor
 public class Report {
 
-    //type of a disaster,location,time,description
+    //type of disaster,location,time,description
     //user who reported it
     //photos
 
@@ -28,6 +26,7 @@ public class Report {
     private Long id;
 
     @Column(nullable = false)
+    @Enumerated(EnumType.STRING)
     private DisasterType disasterType;
 
     @ManyToOne
@@ -35,14 +34,15 @@ public class Report {
     private Location location;
 
     @Column(nullable = false)
-    private LocalDateTime reportTime;
+    private LocalDateTime reportDateTime;
 
+    @Size(max = 500)
     private String description;
 
     private ReportStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id", nullable = true)
     private AppUser user;
 
     @OneToMany(mappedBy = "report",cascade = CascadeType.ALL)
@@ -53,7 +53,7 @@ public class Report {
         this.id = id;
         this.disasterType = disasterType;
         this.location = location;
-        this.reportTime = reportTime;
+        this.reportDateTime = reportTime;
         this.description = description;
         this.user = user;
         this.photos = photos;
@@ -63,7 +63,7 @@ public class Report {
         this.id = id;
         this.disasterType = disasterType;
         this.location = location;
-        this.reportTime = reportTime;
+        this.reportDateTime = reportTime;
         this.description = description;
         this.photos = photos;
     }
