@@ -25,8 +25,19 @@ public class City {
 
     private String zipCode;
 
+    private double latitudeCityCenter;
+    private double longitudeCityCenter;
+
     public City(String name, String zipCode) {
         this.name = name;
         this.zipCode = zipCode;
     }
+
+    public City(String name, double latitudeCityCenter, double longitudeCityCenter) {
+        this.name = name;
+        this.latitudeCityCenter = latitudeCityCenter;
+        this.longitudeCityCenter = longitudeCityCenter;
+    }
+
+
 }

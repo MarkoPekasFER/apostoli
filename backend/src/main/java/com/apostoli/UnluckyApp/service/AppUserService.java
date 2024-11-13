@@ -33,10 +33,9 @@ public class AppUserService {
         this.encoder = new BCryptPasswordEncoder(13);
     }
 
-    public AppUser registerUser(AppUser user) {
+    public void registerUser(AppUser user) {
         user.setPassword(encoder.encode(user.getPassword()));
         userRepository.save(user);
-        return user;
     }
 
 
@@ -48,6 +47,11 @@ public class AppUserService {
     public Optional<AppUser> fetchUserInfoByUsername(String username) {
         return userRepository.findByUsername(username);
     }
+
+    public Optional<AppUser> fetchUserInfoByEmail(String username) {
+        return userRepository.findByEmail(username);
+    }
+
 
     public String verify(AppUser user) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
