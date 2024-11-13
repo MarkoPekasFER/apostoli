@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 public class ReportService {
@@ -38,4 +39,9 @@ public class ReportService {
         //TODO: add logic to set the photos
         return reportRepository.save(report);
     }
+
+    public List<Report> fetchAllReports() {
+        return reportRepository.findAll();
+    }
+
 }

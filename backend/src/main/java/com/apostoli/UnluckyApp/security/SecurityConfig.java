@@ -28,15 +28,14 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
                 .cors(Customizer.withDefaults())
-                .authorizeHttpRequests(reqMatchReg -> reqMatchReg.requestMatchers("/api/v1/user/profile","/api/v1/user/stats")
-                        .authenticated().anyRequest().permitAll())
+                .authorizeHttpRequests(reqMatchReg -> reqMatchReg.requestMatchers("/api/v1/user/profile","/api/v1/user/stats").authenticated()
+                        .anyRequest().permitAll())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .httpBasic(Customizer.withDefaults())
                 //.oauth2Login(Customizer.withDefaults())
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
-
 
 
 
