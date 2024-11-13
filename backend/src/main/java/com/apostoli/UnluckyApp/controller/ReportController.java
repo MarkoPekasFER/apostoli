@@ -35,4 +35,6 @@ public class ReportController {
         return reportService.fetchAllReports();
     }
 
+    
+
 }
