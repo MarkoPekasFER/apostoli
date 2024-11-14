@@ -1,7 +1,7 @@
 package com.apostoli.UnluckyApp.controller;
 
 import com.apostoli.UnluckyApp.model.entity.AppUser;
-import com.apostoli.UnluckyApp.service.AppUserService;
+import com.apostoli.UnluckyApp.service.impl.AppUserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -14,10 +14,10 @@ import java.util.Optional;
 @RequestMapping("/api/v1/user")
 public class AppUserController {
 
-    private final AppUserService userService;
+    private final AppUserServiceImpl userService;
 
     @Autowired
-    public AppUserController(AppUserService userService) {
+    public AppUserController(AppUserServiceImpl userService) {
         this.userService = userService;
     }
 

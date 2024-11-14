@@ -2,6 +2,7 @@ package com.apostoli.UnluckyApp.controller;
 
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.service.ReportService;
+import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -13,10 +14,10 @@ import java.util.List;
 @RequestMapping("/api/v1/report")
 public class ReportController {
 
-    private final ReportService reportService;
+    private final ReportServiceImpl reportService;
 
     @Autowired
-    public ReportController(ReportService reportService) {
+    public ReportController(ReportServiceImpl reportService) {
         this.reportService = reportService;
     }
 
