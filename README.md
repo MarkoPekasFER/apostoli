@@ -39,7 +39,7 @@ pnpm run dev
 
 ## Članovi tima 
 > Marko Pekas (Project Manager)  
-> Nino Salai (backend)  
+> Nino Salai   
 > Dominik Karuc  
 > Fran Rajčević  
 > Vanja Gretić  
