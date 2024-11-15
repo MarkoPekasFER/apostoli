@@ -1,5 +1,9 @@
 import UserAddReport from "@/components/maps/UserAddReport";
 import UserIcon from "@/components/user/UserIcon";
+
+
+import AppInstructions from "@/components/AppInstructions";
+
 import { Inter } from 'next/font/google'
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
@@ -8,10 +12,11 @@ import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 
-const GoogleMapParent = dynamic(() => import('@/components/maps/GoogleMap'), { 
-  ssr: false 
+
+const GoogleMapParent = dynamic(() => import("@/components/maps/GoogleMap"), {
+  ssr: false,
 });
-const inter = Inter({ subsets: ['latin'] })
+const inter = Inter({ subsets: ["latin"] });
 
 export default function Home() {
   const [reports, setReports] = useState([]);
@@ -71,6 +76,18 @@ export default function Home() {
           </Button>
           </Link>
         </div>
+
+
+        {/* <Link href="/about">
+        <Button>
+          About
+        </Button>
+      </Link> */}
+
+
+      </div>
+      <div className="absolute bottom-0 right-0 w-full mb-5 ml-5 p-5">
+        <AppInstructions></AppInstructions>
       </div>
     </div>
   );
