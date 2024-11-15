@@ -48,12 +48,12 @@ function UserIcon() {
         <DropdownMenuGroup>
           <DropdownMenuItem>
             <User />
-            <span>Profil</span>
+            <Link href="/settings/profile">Profil</Link>
             <DropdownMenuShortcut>⇧⌘P</DropdownMenuShortcut>
           </DropdownMenuItem>
           <DropdownMenuItem>
             <Settings />
-            <Link href="/settings/profile/">Postavke</Link>
+            <Link href="/settings/preferences/">Postavke</Link>
           </DropdownMenuItem>
         </DropdownMenuGroup>
         <DropdownMenuSeparator />

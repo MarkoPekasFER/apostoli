@@ -4,8 +4,10 @@ import {
   Inbox,
   Key,
   LifeBuoy,
-  Search,
+  SquareArrowLeft,
   Settings,
+  SettingsIcon,
+  User,
 } from "lucide-react";
 
 import {
@@ -20,17 +22,16 @@ import {
 } from "@/components/ui/sidebar";
 import Link from "next/link";
 
-// Menu items.
 const items = [
+  {
+    title: "Podešavanje",
+    url: "/settings/preferences",
+    icon: SettingsIcon,
+  },
   {
     title: "Profil",
     url: "/settings/profile",
-    icon: Home,
-  },
-  {
-    title: "E-mail",
-    url: "/settings/email",
-    icon: Inbox,
+    icon: User,
   },
   {
     title: "Lozinka",
@@ -41,6 +42,11 @@ const items = [
     title: "Podrška",
     url: "/settings/support",
     icon: LifeBuoy,
+  },
+  {
+    title: "Povratak na početnu",
+    url: "/",
+    icon: SquareArrowLeft,
   },
 ];
 

@@ -16,7 +16,7 @@ const Support = () => {
   return (
     <Card className="h-4/5 sm:w-3/4 md:w-1/2 lg:w-1/2 bg-white shadow-lg rounded-lg p-6">
       <CardHeader>
-        <CardTitle>Postavke</CardTitle>
+        <CardTitle>Postavke - podrška</CardTitle>
         <CardDescription>Korisnička podrška.</CardDescription>
       </CardHeader>
 
