@@ -17,6 +17,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import AppInstructions from "@/components/AppInstructions";
 
 const Profile = () => {
   return (
