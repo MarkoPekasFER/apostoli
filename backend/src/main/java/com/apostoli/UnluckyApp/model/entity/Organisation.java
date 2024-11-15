@@ -6,6 +6,8 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.List;
+
 @Entity
 @Getter
 @Setter
@@ -13,8 +15,6 @@ import lombok.Setter;
 @NoArgsConstructor
 
 public class Organisation {
-
-    // Information about the organisation running the application
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -24,4 +24,7 @@ public class Organisation {
     private String name;
     @Column(nullable = false)
     private String email;
+
+    @OneToMany
+    private List<AppUser> members;
 }
