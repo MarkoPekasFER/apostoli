@@ -36,6 +36,10 @@ public class AppUserController {
             return ResponseEntity.status(HttpStatus.CONFLICT).body("Email already in use");
         }
 
+        if(user.getPassword() == null || user.getPassword().isEmpty()){
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Password cannot be empty");
+        }
+
         userService.registerUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body("User registered successfully");
     }
