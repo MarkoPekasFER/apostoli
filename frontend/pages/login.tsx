@@ -10,43 +10,88 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import Link from "next/link";
+import { useRouter } from 'next/router';
 
 function Login() {
+  const [username, setUsername] = React.useState('');
+  const [password, setPassword] = React.useState('');
+  const router = useRouter();
+
+  const handleSubmit = async (e: { preventDefault: () => void; }) => {
+    e.preventDefault();
+    try {
+      const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/user/login', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ username, password }),
+      });
+      if (response.ok) {
+        // response body is readable stream with token as text
+        const data = await response.text();
+        console.log(data)
+        // Assume data contains the JWT token
+        const token = data
+
+        // Store the token in localStorage
+        localStorage.setItem('token', token);
+
+        // Redirect to the main page
+        router.push('/');
+      } else {
+        // Handle errors
+        const errorData = await response.json();
+        console.error('Login failed:', errorData);
+        alert('Prijava nije uspjela: ' + (errorData.message || 'Nepoznata greška'));
+      }
+    } catch (error) {
+      console.error('An error occurred:', error);
+      alert('Došlo je do pogreške prilikom prijave.');
+    }
+  };
+
   return (
     <div className="w-full h-screen flex items-center justify-center p-4">
       <Card className="max-w-[350px] w-full">
         <CardHeader>
           <CardTitle className="text-3xl">Prijava</CardTitle>
           <CardDescription>
-            Prijavi se na svoj korisnicki racun ili se registriraj ovdje.
+            Prijavi se na svoj korisnički račun ili se registriraj ovdje.
           </CardDescription>
         </CardHeader>
         <CardContent>
-          <form>
+          <form onSubmit={handleSubmit}>
             <div className="grid w-full items-center gap-4">
               <div className="flex flex-col space-y-1.5">
-                <Input id="email" type="email" placeholder="Email" />
+                <Input
+                  id="username"
+                  type="text"
+                  placeholder="Korisničko ime"
+                  value={username}
+                  onChange={(e) => setUsername(e.target.value)}
+                />
               </div>
               <div className="flex flex-col space-y-1.5">
-                <Input id="password" type="password" placeholder="Sifra" />
+                <Input
+                  id="password"
+                  type="password"
+                  placeholder="Šifra"
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                />
               </div>
             </div>
+            <div className="w-full pt-4">
+              <Button className="w-full" type="submit">
+                Prijava
+              </Button>
+            </div>
           </form>
-          <div className="w-full pt-4">
-            <Button className="w-full">Prijava</Button>
-          </div>
           <div className="pt-4">
             <p className="text-sm text-center">
-              Nemate korisnicki racun?{" "}
+              Nemate korisnički račun?{" "}
               <Link href="/register" className="text-blue-500">
                 Registriraj se
               </Link>
@@ -61,7 +106,7 @@ function Login() {
                 className="w-6 h-6 mr-2"
                 alt="google logo"
               />
-              Login With Google
+              Prijava s Googleom
             </Button>
           </Link>
         </CardFooter>

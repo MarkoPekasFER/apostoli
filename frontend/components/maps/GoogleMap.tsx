@@ -1,5 +1,6 @@
 import React, { useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
+import { useRouter } from 'next/router';
 
 const containerStyle = {
   width: "100vw",
@@ -108,37 +109,66 @@ const defaultMapOptions = {
 };
 
 const GoogleMapParent = () => {
-  const [locations, setLocations] = React.useState<any[]>([]);
+  const [reports, setReports] = React.useState<any[]>([]);
+  const router = useRouter();
 
   useEffect(() => {
-    const fetchLocations = async () => {
-      const res = await fetch("/api/get/locations");
-      const locations = await res.json();
-      return locations;
+    const fetchReports = async () => {
+      const token = localStorage.getItem('token');
+      if (!token) {
+        // Redirect to login if not authenticated
+        router.push('/login');
+        return;
+      }
+      try {
+        const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/report/all', {
+          headers: {
+            'Authorization': `Bearer ${token}`,
+          },
+        });
+        if (response.ok) {
+          const data = await response.json();
+          setReports(data);
+        } else if (response.status === 401) {
+          // Token might have expired or is invalid
+          localStorage.removeItem('token');
+          router.push('/login');
+        } else {
+          console.error('Failed to fetch reports');
+        }
+      } catch (error) {
+        console.error('An error occurred:', error);
+      }
     };
-    setTimeout(
-      () => fetchLocations().then((locations) => setLocations(locations)),
-      1000
-    );
-  }, []);
+    fetchReports();
+  }, [router]);
 
-  const handleMarkerClick = (e: any) => {
-    const location = locations.find(
-      (loc) => loc.lat === e.latLng.lat() && loc.lng === e.latLng.lng()
-    );
-    const name = location?.name;
-
-    console.log(name);
+  const handleMarkerClick = (report: any) => {
+    // Handle marker click, e.g., show report details
+    console.log('Clicked report:', report);
+    alert(`Disaster Type: ${report.disasterType}\nDescription: ${report.description}`);
   };
-  
-  const fireIcon: any = {
-    url: "https://cdn-icons-png.freepik.com/256/1066/1066232.png?semt=ais_hybrid", // URL to the custom fire image
-    scaledSize: {
-      "width": 40,
-      "height": 40,
+
+  // Define icons for different disaster types
+  const disasterIcons: any = {
+    FIRE: {
+      url: "/icons/fire.png",
+      scaledSize: { width: 40, height: 40 },
+    },
+    EARTHQUAKE: {
+      url: "/icons/mountain.png",
+      scaledSize: { width: 40, height: 40 },
+    },
+    FLOOD: {
+      url: "/icons/water.png",
+      scaledSize: { width: 40, height: 40 },
+    },
+    // Add other disaster types with appropriate icons
+    DEFAULT: {
+      url: "/icons/warning.png",
+      scaledSize: { width: 40, height: 40 },
     },
   };
-
 
   return (
     <LoadScript
@@ -150,12 +180,15 @@ const GoogleMapParent = () => {
         zoom={10}
         options={defaultMapOptions}
       >
-        {locations?.map((location, index) => (
+        {reports?.map((report, index) => (
           <Marker
             key={index}
-            position={location}
-            onClick={(e) => handleMarkerClick(e)}
-            icon={fireIcon}
+            position={{
+              lat: report.location.latitude,
+              lng: report.location.longitude,
+            }}
+            onClick={() => handleMarkerClick(report)}
+            icon={disasterIcons[report.disasterType] || disasterIcons.DEFAULT}
           />
         ))}
       </GoogleMap>
