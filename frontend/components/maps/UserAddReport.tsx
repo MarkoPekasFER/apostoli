@@ -145,7 +145,7 @@ function UserAddReport() {
       <DialogTrigger className="p-4 bg-white text-neutral-900 shadow-2xl rounded-full">
         {/* <Plus /> */}
       </DialogTrigger>
-      <DialogContent className="bg-white">
+      <DialogContent className="bg-white text-neutral-900">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Prijavi Nesreću</DialogTitle>

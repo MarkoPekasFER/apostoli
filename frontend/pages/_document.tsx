@@ -1,3 +1,4 @@
+import { ThemeProvider } from "@/components/ThemeProvider";
 import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
@@ -5,8 +6,16 @@ export default function Document() {
     <Html lang="en">
       <Head />
       <body className="antialiased">
-        <Main />
-        <NextScript />
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="light"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <Main />
+          <NextScript />
+        </ThemeProvider>
+
       </body>
     </Html>
   );

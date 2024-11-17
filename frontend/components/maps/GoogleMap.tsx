@@ -132,7 +132,7 @@ const GoogleMapParent = () => {
         } else if (response.status === 401) {
           // Token might have expired or is invalid
           localStorage.removeItem('token');
-          router.push('/login');
+          // router.push('/login');
         } else {
           console.error('Failed to fetch reports');
         }
