@@ -70,7 +70,7 @@ export default function Home() {
       </div>
       <div className="absolute bottom-0 left-0 w-full">
         <div className="p-4 pb-8 lg:p-16 lg:px-28 w-full flex justify-between">
-        <AppInstructions></AppInstructions>
+          <AppInstructions></AppInstructions>
           <Link href={'/report'}>
           <Button size={'icon'}>
           <Plus />
