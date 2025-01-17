@@ -7,7 +7,7 @@ export default function sidebarLayout(page: ReactElement) {
     <SidebarProvider>
       <div className="flex h-screen">
         <AppSidebar />
-        <main className="flex-1 p-4 bg-gray-100 w-screen">
+        <main className="flex-1 p-4 bg-gray-100 w-screen dark:bg-gray-800">
           <SidebarTrigger />
           {page}
         </main>

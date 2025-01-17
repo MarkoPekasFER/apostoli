@@ -20,7 +20,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
-import { useRouter } from 'next/router';
+import { useRouter } from "next/router";
 
 // Import Google Maps components
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
@@ -48,7 +48,8 @@ function UserAddReport() {
     lng: 15.978817,
   });
 
-  const [markerPosition, setMarkerPosition] = useState<google.maps.LatLngLiteral | null>(null);
+  const [markerPosition, setMarkerPosition] =
+    useState<google.maps.LatLngLiteral | null>(null);
 
   // Function to get user's current location
   const getCurrentLocation = () => {
@@ -70,12 +71,14 @@ function UserAddReport() {
           }));
         },
         (error) => {
-          console.error('Error getting location:', error);
-          alert('Ne možemo dohvatiti vašu lokaciju. Molimo omogućite pristup lokaciji.');
+          console.error("Error getting location:", error);
+          alert(
+            "Ne možemo dohvatiti vašu lokaciju. Molimo omogućite pristup lokaciji."
+          );
         }
       );
     } else {
-      alert('Vaš preglednik ne podržava geolokaciju.');
+      alert("Vaš preglednik ne podržava geolokaciju.");
     }
   };
 
@@ -88,38 +91,44 @@ function UserAddReport() {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const token = localStorage.getItem('token');
+    const token = localStorage.getItem("token");
     if (!token) {
       // Redirect to login if not authenticated
-      router.push('/login');
+      router.push("/login");
       return;
     }
     try {
-      const response = await fetch(process.env.NEXT_PUBLIC_API_URL +'/api/v1/report/submit', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${token}`,
-        },
-        body: JSON.stringify(form),
-      });
+      const response = await fetch(
+        process.env.NEXT_PUBLIC_API_URL + "/api/v1/report/submit",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(form),
+        }
+      );
       if (response.ok) {
-        alert('Nesreća je uspješno prijavljena');
+        alert("Nesreća je uspješno prijavljena");
         setIsDialogOpen(false);
         // Optionally, refresh the page to show the new report
-        router.push('/');
+        router.push("/");
       } else if (response.status === 401) {
         // Token might have expired or is invalid
-        localStorage.removeItem('token');
-        router.push('/login');
+        localStorage.removeItem("token");
+        router.push("/login");
       } else {
         const errorData = await response.json();
-        console.error('Failed to submit report:', errorData);
-        alert('Greška prilikom prijave nesreće: ' + (errorData.message || 'Nepoznata greška'));
+        console.error("Failed to submit report:", errorData);
+        alert(
+          "Greška prilikom prijave nesreće: " +
+            (errorData.message || "Nepoznata greška")
+        );
       }
     } catch (error) {
-      console.error('An error occurred:', error);
-      alert('Došlo je do pogreške prilikom prijave nesreće.');
+      console.error("An error occurred:", error);
+      alert("Došlo je do pogreške prilikom prijave nesreće.");
     }
   };
 
@@ -145,7 +154,7 @@ function UserAddReport() {
       <DialogTrigger className="p-4 bg-white text-neutral-900 shadow-2xl rounded-full">
         {/* <Plus /> */}
       </DialogTrigger>
-      <DialogContent className="bg-white text-neutral-900">
+      <DialogContent className="bg-white text-neutral-900 dark:bg-gray-900 dark:text-white dark:border-white">
         <form onSubmit={handleSubmit}>
           <DialogHeader>
             <DialogTitle>Prijavi Nesreću</DialogTitle>
@@ -166,8 +175,10 @@ function UserAddReport() {
             <div className="flex flex-col space-y-1.5">
               <Label htmlFor="location">Odaberite lokaciju</Label>
               <div className="w-full h-64 bg-neutral-100 rounded-md">
-                  <LoadScript
-                  googleMapsApiKey={process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""}
+                <LoadScript
+                  googleMapsApiKey={
+                    process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || ""
+                  }
                 >
                   <GoogleMap
                     mapContainerStyle={mapContainerStyle}
@@ -175,11 +186,7 @@ function UserAddReport() {
                     zoom={10}
                     onClick={handleMapClick}
                   >
-                    {markerPosition && (
-                      <Marker
-                        position={markerPosition}
-                      />
-                    )}
+                    {markerPosition && <Marker position={markerPosition} />}
                   </GoogleMap>
                 </LoadScript>
               </div>
@@ -188,7 +195,9 @@ function UserAddReport() {
               <div className="flex flex-col space-y-1.5">
                 <Label htmlFor="disasterType">Tip nesreće</Label>
                 <Select
-                  onValueChange={(value) => setForm({ ...form, disasterType: value })}
+                  onValueChange={(value) =>
+                    setForm({ ...form, disasterType: value })
+                  }
                   value={form.disasterType}
                 >
                   <SelectTrigger id="disasterType">
@@ -209,7 +218,9 @@ function UserAddReport() {
             </div>
           </div>
           <DialogFooter>
-            <Button type="submit">Prijavi</Button>
+            <Button className="dark:bg-black dark:text-white" type="submit">
+              Prijavi
+            </Button>
           </DialogFooter>
         </form>
       </DialogContent>

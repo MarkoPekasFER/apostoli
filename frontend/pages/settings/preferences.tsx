@@ -1,6 +1,5 @@
 import sidebarLayout from "@/components/SidebarLayout";
 import { Label } from "@/components/ui/label";
-import { Button } from "@/components/ui/button";
 import { Switch } from "@/components/ui/switch";
 import {
   Card,
@@ -10,14 +9,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
-import AppInstructions from "@/components/AppInstructions";
+import ChangeTheme from "../../components/ChangeTheme";
 
 const Profile = () => {
   return (
@@ -33,19 +25,7 @@ const Profile = () => {
       <CardContent>
         <form>
           <div className="grid w-full gap-4">
-            <div className="flex flex-col space-y-1.5">
-              <Label htmlFor="tema">Tema</Label>
-              <Select>
-                <SelectTrigger id="tema">
-                  <SelectValue placeholder="Izaberi" />
-                </SelectTrigger>
-                <SelectContent position="popper">
-                  <SelectItem value="Tamna">Tamna</SelectItem>
-                  <SelectItem value="Svijetla">Svijetla</SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-
+            <ChangeTheme></ChangeTheme>
             <div className="flex items-center space-x-2">
               <Label htmlFor="notifications">Primaj obavijesti</Label>
               <Switch id="notifications" />
@@ -54,9 +34,7 @@ const Profile = () => {
         </form>
       </CardContent>
 
-      <CardFooter className="flex justify-between">
-        <Button>Spremi promjene</Button>
-      </CardFooter>
+      <CardFooter className="flex justify-between"></CardFooter>
     </Card>
   );
 };
