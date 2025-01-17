@@ -14,14 +14,14 @@ const AppInstructions = () => {
   return (
     <Dialog>
       <DialogTrigger>
-        <CircleHelp className=" h-9 w-9 md:h-18 md:w-18 lg:h-16 lg:w-16  w-auto"></CircleHelp>
+        <CircleHelp className=" h-9 w-9 md:h-18 md:w-18 lg:h-16 lg:w-16 w-auto"></CircleHelp>
       </DialogTrigger>
-      <DialogContent className="bg-white">
-        <DialogTitle className="text-black">
+      <DialogContent className="bg-white dark:bg-slate-800">
+        <DialogTitle className="text-black dark:text-white mt-2">
           Dobrodošli u aplikaciju za prijavu vremenskih nepogoda
         </DialogTitle>
-        <hr className="border-black" />
-        <DialogDescription className="mt-2 text-sm text-gray-600">
+        <hr className="border-black dark:border-white" />
+        <DialogDescription className="mt-2 text-sm text-gray-100 dark:text-gray-">
           Dobrodošli u verziju 1.0 aplikacije za prijavu vremenskih nepogoda.
           Ova aplikacija omogućava brzo i jednostavno prijavljivanje različitih
           vremenskih nepogoda putem intuitivnog korisničkog sučelja.
