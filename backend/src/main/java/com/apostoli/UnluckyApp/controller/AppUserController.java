@@ -1,13 +1,20 @@
 package com.apostoli.UnluckyApp.controller;
 
 import com.apostoli.UnluckyApp.model.entity.AppUser;
+import com.apostoli.UnluckyApp.model.entity.Report;
+import com.apostoli.UnluckyApp.model.entity.Role;
+import com.apostoli.UnluckyApp.model.enums.ReportStatus;
+import com.apostoli.UnluckyApp.model.enums.RoleType;
 import com.apostoli.UnluckyApp.service.impl.AppUserServiceImpl;
+import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.security.Principal;
+import java.util.Collections;
+import java.util.List;
 import java.util.Optional;
 
 @RestController
@@ -56,6 +63,4 @@ public class AppUserController {
     }
 
 
-
-
-    }
+}
