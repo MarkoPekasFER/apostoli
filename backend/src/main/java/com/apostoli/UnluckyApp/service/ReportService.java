@@ -7,4 +7,6 @@ import java.util.List;
 public interface ReportService {
     Report submitReport(Report report, String username);
     List<Report> fetchAllReports();
+
+
 }
