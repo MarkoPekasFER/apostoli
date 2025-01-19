@@ -1,5 +1,6 @@
 package com.apostoli.UnluckyApp.service.impl;
 
+import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Location;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.model.enums.ReportStatus;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Collections;
 import java.util.List;
 
 @Service
@@ -44,5 +46,6 @@ public class ReportServiceImpl implements ReportService {
     public List<Report> fetchAllReports() {
         return reportRepository.findAll();
     }
+
 
 }

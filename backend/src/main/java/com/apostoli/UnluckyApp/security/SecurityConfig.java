@@ -29,7 +29,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http.csrf(AbstractHttpConfigurer::disable)
-                .cors(cors -> cors.configurationSource(corsConfigurationSource())) // Use the custom CORS configuration
                 .authorizeHttpRequests(reqMatchReg -> reqMatchReg
                         .requestMatchers("/api/v1/user/profile", "/api/v1/user/stats").authenticated()
                         .anyRequest().permitAll())
@@ -41,19 +40,6 @@ public class SecurityConfig {
                         .userInfoEndpoint(userInfo -> userInfo.userService(new DefaultOAuth2UserService())))
                 .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
-
-    @Bean
-    public CorsConfigurationSource corsConfigurationSource() {
-        CorsConfiguration configuration = new CorsConfiguration();
-        configuration.addAllowedOrigin("http://localhost:3000"); // Allow your frontend origin
-        configuration.addAllowedOrigin("https://apostoli.markopekas.com"); // Allow your frontend origin
-        configuration.addAllowedMethod("*"); // Allow all HTTP methods
-        configuration.addAllowedHeader("*"); // Allow all headers
-        configuration.setAllowCredentials(true); // Allow cookies/auth headers
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
-        source.registerCorsConfiguration("/**", configuration);
-        return source;
     }
 
 
