@@ -47,11 +47,11 @@ public class AppUserServiceImpl implements AppUserService {
     private final RoleServiceImpl roleService;
     private final EmailTokenRepository emailTokenRepository;
 
-    @Value("${link_za_email_testing}")
-    String link; //samo za testiranje
+    //@Value("${link_za_email_testing}")
+   // String link; //samo za testiranje
 
-    //@Value("${link_za_email_prod}")
-    // String link; // za prod
+    @Value("${link_za_email_prod}")
+    String link; // za prod
 
     @Autowired
     public AppUserServiceImpl(AppUserRepository userRepository, ReportRepository reportRepository, JwtService jwtService, EmailTokenService emailTokenService, EmailSender emailSender, AuthenticationManager authManager, RoleServiceImpl roleService, EmailTokenRepository emailTokenRepository) {
