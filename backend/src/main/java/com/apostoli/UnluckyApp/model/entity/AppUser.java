@@ -29,24 +29,27 @@ public class AppUser {
    // @Column(nullable = false)
     private String email;
 
+
+    private boolean verified;
+
     public AppUser(String username, String password, String email) {
         this.username = username;
         this.password = password;
         this.email = email;
     }
 
-
-
-
     @Override
     public String toString() {
-        return "User{" +
+        return "AppUser{" +
                 "id=" + id +
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", verified=" + verified +
+                ", roles=" + roles +
                 '}';
     }
+
     @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
     private List<Role> roles;
 

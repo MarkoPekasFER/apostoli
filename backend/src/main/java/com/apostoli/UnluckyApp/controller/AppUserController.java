@@ -1,10 +1,9 @@
 package com.apostoli.UnluckyApp.controller;
 
+import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Report;
-import com.apostoli.UnluckyApp.model.entity.Role;
-import com.apostoli.UnluckyApp.model.enums.ReportStatus;
-import com.apostoli.UnluckyApp.model.enums.RoleType;
+
 import com.apostoli.UnluckyApp.service.impl.AppUserServiceImpl;
 import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +21,12 @@ import java.util.Optional;
 public class AppUserController {
 
     private final AppUserServiceImpl userService;
+    private final EmailTokenService emailTokenService;
 
     @Autowired
-    public AppUserController(AppUserServiceImpl userService) {
+    public AppUserController(AppUserServiceImpl userService, EmailTokenService emailTokenService) {
         this.userService = userService;
+        this.emailTokenService = emailTokenService;
     }
 
     @PostMapping("/register")
@@ -60,6 +61,25 @@ public class AppUserController {
     public Optional<AppUser> getUserProfile(Principal principal) {
         String username = principal.getName();
         return userService.fetchUserInfoByUsername(username);
+    }
+
+    @GetMapping("/reports")
+    public List<Report> GetUserReports(Principal principal) {
+        String username = principal.getName();
+        AppUser user = userService.fetchUserInfoByUsername(username).orElse(null);
+        return userService.fetchUserReportsByUsername(user);
+    }
+
+    @GetMapping("/register/confirm")
+    public ResponseEntity<String> confirmEmail(@RequestParam("token") String token) {
+        boolean isConfirmed = emailTokenService.confirmToken(token);
+        if (isConfirmed) {
+            return ResponseEntity.status(HttpStatus.FOUND)
+                    .header("Location", "http://apostoli.markopekas.com")
+                    .build();
+        } else {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found");
+        }
     }
 
 
