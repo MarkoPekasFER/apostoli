@@ -3,7 +3,9 @@ package com.apostoli.UnluckyApp.controller;
 import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Report;
+
 import com.apostoli.UnluckyApp.service.impl.AppUserServiceImpl;
+import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -79,9 +81,6 @@ public class AppUserController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found");
         }
     }
-
-
-
 
 
 }

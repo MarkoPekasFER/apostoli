@@ -53,4 +53,7 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
     private List<Role> roles;
 
+    //public Organisation organisation;
+
+
 }

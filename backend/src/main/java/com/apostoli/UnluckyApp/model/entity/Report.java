@@ -29,6 +29,7 @@ public class Report {
     @Enumerated(EnumType.STRING)
     private DisasterType disasterType;
 
+
     @ManyToOne
     @JoinColumn(name = "location_id", nullable = false)
     private Location location;
