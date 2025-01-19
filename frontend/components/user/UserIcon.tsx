@@ -32,17 +32,40 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 
 function UserIcon() {
+  const router = useRouter();
+  const [token, setToken] = useState("");
+
+  useEffect(() => {
+    // fetch token from local storage
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // Redirect to login if not authenticated
+      // router.push("/login");
+      return;
+    }
+    setToken(token);
+  }, []);
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    router.push("/login");
+  };
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
         <Avatar>
-          <AvatarImage src="https://img.freepik.com/premium-vector/anime-girl-face_24640-79435.jpg" />
+          <AvatarImage src="/user.png" className="bg-white" />
           <AvatarFallback>AP</AvatarFallback>
         </Avatar>
       </DropdownMenuTrigger>
-      <DropdownMenuContent className="w-56 ml-4">
+      {
+token?
+        <DropdownMenuContent className="w-56 ml-4">
         <DropdownMenuLabel>Moj Racun</DropdownMenuLabel>
         <DropdownMenuSeparator />
         <DropdownMenuGroup>
@@ -66,14 +89,26 @@ function UserIcon() {
           <span>API</span>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
-        <Link href="/login">
-          <DropdownMenuItem>
+          <DropdownMenuItem onClick={handleLogout}>
             <LogOut />
             <span>Log out</span>
             <DropdownMenuShortcut>⇧⌘Q</DropdownMenuShortcut>
           </DropdownMenuItem>
-        </Link>
       </DropdownMenuContent>
+    :
+    <DropdownMenuContent className="w-56 ml-4">
+      <DropdownMenuLabel>Moj Racun</DropdownMenuLabel>
+      <DropdownMenuSeparator />
+      <DropdownMenuItem>
+        <UserPlus />
+        <Link href="/register">Registriraj se</Link>
+      </DropdownMenuItem>
+      <DropdownMenuItem>
+        <LogOut />
+        <Link href="/login">Prijavi se</Link>
+      </DropdownMenuItem>  
+    </DropdownMenuContent>
+    }
     </DropdownMenu>
   );
 }

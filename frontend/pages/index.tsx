@@ -22,6 +22,17 @@ const inter = Inter({ subsets: ["latin"] });
 export default function Home() {
   const [reports, setReports] = useState([]);
   const router = useRouter();
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    // fetch token from local storage
+    const token = localStorage.getItem('token');
+    if (!token) {
+      // Redirect to login if not authenticated
+      return
+    }
+    setToken(token);
+  }, []);
 
   // useEffect(() => {
   //   const fetchReports = async () => {
@@ -72,7 +83,7 @@ export default function Home() {
       <div className="absolute bottom-24 left-0 w-full">
         <div className="p-4 pb-16 lg:p-16 lg:px-28 w-full flex justify-between">
           <AppInstructions></AppInstructions>
-          <Link href={'/report'}>
+          <Link href={token?'/report':'/login'}>
           <Button className="bg-blue-500" size={'icon'}>
           <Plus />
           </Button>
@@ -97,9 +108,9 @@ export default function Home() {
           naše aplikacije. Vaša sigurnost nam je na prvom mjestu, stoga budite oprezni i odgovorni.
           </p>
           <div className="flex justify-center pt-10">
-            <Link href="/report">
+            <Link href={token?"/report":"/login"}>
               <Button>
-                Prijavi nesreću
+                {token?'Prijavi nesreću':'Ulogiraj se za prijavu nesreće'}
               </Button>
             </Link>
           </div>
