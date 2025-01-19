@@ -35,10 +35,7 @@ public class ReportController {
         return reportService.fetchAllReports();
     }
 
-    @PostMapping("/approve/{reportId}")
-    private boolean approveReport(@PathVariable Long reportId) {
-        return reportService.approveReport(reportId);
-    }
+
 
     @PostMapping("/reject/{reportId}")
     private boolean rejectReport(@PathVariable Long reportId) {
@@ -50,7 +47,10 @@ public class ReportController {
         return reportService.resolveReport(reportId);
     }
 
-
+    @PostMapping("/approve/{reportId}")
+    private boolean approveReport(@PathVariable Long reportId) {
+        return reportService.approveReport(reportId);
+    }
 
 
 }

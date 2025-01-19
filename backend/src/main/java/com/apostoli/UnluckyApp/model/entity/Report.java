@@ -39,6 +39,7 @@ public class Report {
     @Size(max = 500)
     private String description;
 
+
     private ReportStatus status;
 
     @ManyToOne
