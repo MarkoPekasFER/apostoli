@@ -47,15 +47,6 @@ public class ReportServiceImpl implements ReportService {
         return reportRepository.findAll();
     }
 
-    public boolean approveReport(Long reportId) {
-        Report report = reportRepository.findById(reportId).orElse(null);
-        if (report == null) {
-            return false;
-        }
-        report.setStatus(ReportStatus.ACTIVE);
-        reportRepository.save(report);
-        return true;
-    }
 
     public boolean rejectReport(Long reportId) {
         Report report = reportRepository.findById(reportId).orElse(null);
@@ -77,6 +68,16 @@ public class ReportServiceImpl implements ReportService {
         return true;
     }
 
+
+    public boolean approveReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElse(null);
+        if (report == null) {
+            return false;
+        }
+        report.setStatus(ReportStatus.ACTIVE);
+        reportRepository.save(report);
+        return true;
+    }
 
 
 
