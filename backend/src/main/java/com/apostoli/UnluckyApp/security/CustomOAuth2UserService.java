@@ -60,6 +60,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             Role userRole = roleRepository.findByName(RoleType.USER)
                                     .orElseThrow(() -> new IllegalStateException("Role not found"));
                             newUser.setRoles(Collections.singletonList(userRole));
+                            newUser.setVerified(true);
                             return userRepository.save(newUser);
                         });
 
