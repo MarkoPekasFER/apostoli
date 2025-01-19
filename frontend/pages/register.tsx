@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/compat/router';
 
 function Register() {
   const [username, setUsername] = React.useState('');
@@ -37,7 +37,7 @@ function Register() {
       if (response.ok) {
         // Optionally log in the user automatically
         // Redirect to login page
-        router.push('/login');
+        router?.push('/login');
       } else {
         // Handle errors
         const errorData = await response.json();

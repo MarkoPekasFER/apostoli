@@ -20,7 +20,7 @@ import { Label } from "../ui/label";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
-import { useRouter } from "next/router";
+import { useRouter } from "next/compat/router";
 
 // Import Google Maps components
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
@@ -94,7 +94,7 @@ function UserAddReport() {
     const token = localStorage.getItem("token");
     if (!token) {
       // Redirect to login if not authenticated
-      router.push("/login");
+      router?.push("/login");
       return;
     }
     try {
@@ -113,11 +113,11 @@ function UserAddReport() {
         alert("Nesreća je uspješno prijavljena");
         setIsDialogOpen(false);
         // Optionally, refresh the page to show the new report
-        router.push("/");
+        router?.push("/");
       } else if (response.status === 401) {
         // Token might have expired or is invalid
         localStorage.removeItem("token");
-        router.push("/login");
+        router?.push("/login");
       } else {
         const errorData = await response.json();
         console.error("Failed to submit report:", errorData);
@@ -151,7 +151,7 @@ function UserAddReport() {
 
   return (
     <Dialog open={true} onOpenChange={() => {
-      router.back();
+      router?.back();
     }}>
       <DialogTrigger className="p-4 bg-white text-neutral-900 shadow-2xl rounded-full">
         {/* <Plus /> */}

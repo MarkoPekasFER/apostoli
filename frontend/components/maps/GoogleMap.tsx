@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/compat/router';
 
 export const containerStyle = {
   width: "100vw",
@@ -117,7 +117,7 @@ const GoogleMapParent = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         // Redirect to login if not authenticated
-        // router.push('/login');
+        // router?.push('/login');
         // return;
       }
       try {
@@ -132,7 +132,7 @@ const GoogleMapParent = () => {
         } else if (response.status === 401) {
           // Token might have expired or is invalid
           localStorage.removeItem('token');
-          // router.push('/login');
+          // router?.push('/login');
         } else {
           console.error('Failed to fetch reports');
         }
@@ -161,8 +161,8 @@ const GoogleMapParent = () => {
         zoom={10}
         options={defaultMapOptions}
       >
-        {reports?.filter(report => report.status === 'PENDING') // change to 'ACTIVE' to show only active reports
-        .map((report, index) => (
+        {reports?.map((report, index) => (
+        // .filter(report => report.status === 'PENDING') // change to 'ACTIVE' to show only active reports
           <Marker
             key={index}
             position={{

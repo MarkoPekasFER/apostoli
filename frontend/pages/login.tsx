@@ -11,7 +11,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import Link from "next/link";
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/compat/router';
 
 function Login() {
   const [username, setUsername] = React.useState('');
@@ -39,7 +39,7 @@ function Login() {
         localStorage.setItem('token', token);
 
         // Redirect to the main page
-        router.push('/');
+        router?.push('/');
       } else {
         // Handle errors
         const errorData = await response.json();
@@ -56,7 +56,7 @@ function Login() {
     <div className="w-full h-screen flex items-center justify-center p-4">
       <Card className="max-w-[350px] w-full">
         <CardHeader>
-          <CardTitle className="text-3xl">Prijava</CardTitle>
+          <CardTitle className="text-3xl">Prijava :)</CardTitle>
           <CardDescription>
             Prijavi se na svoj korisnički račun ili se registriraj ovdje.
           </CardDescription>
@@ -100,7 +100,7 @@ function Login() {
         </CardContent>
         <CardFooter className="flex justify-between">
           <Link href="/" className="w-full">
-            <Button className="w-full" variant={"outline"}>
+            <Button className="w-full" id="google" variant={"outline"}>
               <img
                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
                 className="w-6 h-6 mr-2"

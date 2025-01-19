@@ -15,7 +15,6 @@ export default function Document() {
           <Main />
           <NextScript />
         </ThemeProvider>
-
       </body>
     </Html>
   );

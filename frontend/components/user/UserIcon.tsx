@@ -32,7 +32,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter } from "next/compat/router";
 import { useEffect, useState } from "react";
 
 function UserIcon() {
@@ -44,7 +44,7 @@ function UserIcon() {
     const token = localStorage.getItem("token");
     if (!token) {
       // Redirect to login if not authenticated
-      // router.push("/login");
+      // router?.push("/login");
       return;
     }
     setToken(token);
@@ -52,7 +52,7 @@ function UserIcon() {
 
   const handleLogout = () => {
     localStorage.removeItem("token");
-    router.push("/login");
+    router?.push("/login");
   };
 
   return (

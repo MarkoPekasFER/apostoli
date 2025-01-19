@@ -7,7 +7,7 @@ import AppInstructions from "@/components/AppInstructions";
 import { Inter } from 'next/font/google'
 import dynamic from 'next/dynamic';
 import { useEffect, useState } from 'react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/compat/router';
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
@@ -39,7 +39,7 @@ export default function Home() {
   //     const token = localStorage.getItem('token');
   //     if (!token) {
   //       // Redirect to login if not authenticated
-  //       router.push('/login');
+  //       router?.push('/login');
   //       return;
   //     }
   //     try {
@@ -54,7 +54,7 @@ export default function Home() {
   //       } else if (response.status === 401) {
   //         // Token might have expired or is invalid
   //         localStorage.removeItem('token');
-  //         router.push('/login');
+  //         router?.push('/login');
   //       } else {
   //         console.error('Failed to fetch reports');
   //       }
