@@ -2,17 +2,17 @@ import React, { useEffect } from "react";
 import { GoogleMap, LoadScript, Marker } from "@react-google-maps/api";
 import { useRouter } from 'next/router';
 
-const containerStyle = {
+export const containerStyle = {
   width: "100vw",
-  height: "100vh",
+  height: "90vh",
 };
 
-const origin = {
+export const origin = {
   lat: 45.803016,
   lng: 15.978817,
 };
 
-const nightModeMapStyles = [
+export const nightModeMapStyles = [
   { elementType: "geometry", stylers: [{ color: "#1c1f2a" }] },
   { elementType: "labels.text.stroke", stylers: [{ color: "#1c1f2a" }] },
   { elementType: "labels.text.fill", stylers: [{ color: "#5b6772" }] },
@@ -93,7 +93,7 @@ const nightModeMapStyles = [
   },
 ];
 
-const defaultMapOptions = {
+export const defaultMapOptions = {
   fullscreenControl: false,
   mapTypeControl: false,
   streetViewControl: false,
@@ -117,14 +117,14 @@ const GoogleMapParent = () => {
       const token = localStorage.getItem('token');
       if (!token) {
         // Redirect to login if not authenticated
-        router.push('/login');
-        return;
+        // router.push('/login');
+        // return;
       }
       try {
         const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/report/all', {
-          headers: {
-            'Authorization': `Bearer ${token}`,
-          },
+          // headers: {
+          //   'Authorization': `Bearer ${token}`,
+          // },
         });
         if (response.ok) {
           const data = await response.json();
@@ -149,26 +149,7 @@ const GoogleMapParent = () => {
     alert(`Disaster Type: ${report.disasterType}\nDescription: ${report.description}`);
   };
 
-  // Define icons for different disaster types
-  const disasterIcons: any = {
-    FIRE: {
-      url: "/icons/fire.png",
-      scaledSize: { width: 40, height: 40 },
-    },
-    EARTHQUAKE: {
-      url: "/icons/mountain.png",
-      scaledSize: { width: 40, height: 40 },
-    },
-    FLOOD: {
-      url: "/icons/water.png",
-      scaledSize: { width: 40, height: 40 },
-    },
-    // Add other disaster types with appropriate icons
-    DEFAULT: {
-      url: "/icons/warning.png",
-      scaledSize: { width: 40, height: 40 },
-    },
-  };
+ 
 
   return (
     <LoadScript
@@ -180,7 +161,8 @@ const GoogleMapParent = () => {
         zoom={10}
         options={defaultMapOptions}
       >
-        {reports?.map((report, index) => (
+        {reports?.filter(report => report.status === 'PENDING') // change to 'ACTIVE' to show only active reports
+        .map((report, index) => (
           <Marker
             key={index}
             position={{
@@ -197,3 +179,24 @@ const GoogleMapParent = () => {
 };
 
 export default GoogleMapParent;
+
+ // Define icons for different disaster types
+ export const disasterIcons: any = {
+  FIRE: {
+    url: "/icons/fire.png",
+    scaledSize: { width: 40, height: 40 },
+  },
+  EARTHQUAKE: {
+    url: "/icons/mountain.png",
+    scaledSize: { width: 40, height: 40 },
+  },
+  FLOOD: {
+    url: "/icons/water.png",
+    scaledSize: { width: 40, height: 40 },
+  },
+  // Add other disaster types with appropriate icons
+  DEFAULT: {
+    url: "/icons/warning.png",
+    scaledSize: { width: 40, height: 40 },
+  },
+};

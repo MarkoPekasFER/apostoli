@@ -150,7 +150,9 @@ function UserAddReport() {
   };
 
   return (
-    <Dialog open={true} onOpenChange={setIsDialogOpen}>
+    <Dialog open={true} onOpenChange={() => {
+      router.back();
+    }}>
       <DialogTrigger className="p-4 bg-white text-neutral-900 shadow-2xl rounded-full">
         {/* <Plus /> */}
       </DialogTrigger>

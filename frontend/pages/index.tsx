@@ -11,6 +11,7 @@ import { useRouter } from 'next/router';
 import { Plus } from "lucide-react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
+import Image from "next/image";
 
 
 const GoogleMapParent = dynamic(() => import("@/components/maps/GoogleMap"), {
@@ -68,11 +69,11 @@ export default function Home() {
           <UserIcon />
         </div>
       </div>
-      <div className="absolute bottom-0 left-0 w-full">
-        <div className="p-4 pb-8 lg:p-16 lg:px-28 w-full flex justify-between">
+      <div className="absolute bottom-24 left-0 w-full">
+        <div className="p-4 pb-16 lg:p-16 lg:px-28 w-full flex justify-between">
           <AppInstructions></AppInstructions>
           <Link href={'/report'}>
-          <Button size={'icon'}>
+          <Button className="bg-blue-500" size={'icon'}>
           <Plus />
           </Button>
           </Link>
@@ -86,6 +87,31 @@ export default function Home() {
       </Link> */}
 
 
+      </div>
+      <div className="h-screen bg-white">
+          <h1 className="font-bold text-2xl text-center pt-10">
+            Nesreće HR
+          </h1>
+          <p className="text-center text-lg pt-5 max-w-xl mx-auto">
+            Prijavite nesreću i vidite sve nesrece u blizini pomocu 
+          naše aplikacije. Vaša sigurnost nam je na prvom mjestu, stoga budite oprezni i odgovorni.
+          </p>
+          <div className="flex justify-center pt-10">
+            <Link href="/report">
+              <Button>
+                Prijavi nesreću
+              </Button>
+            </Link>
+          </div>
+
+          <div className="grid xl:grid-cols-2 gap-2 xl:gap-8 p-4">
+            <div>
+
+            </div>
+            <div className="w-full relative object-cover pt-[100%] rounded-xl overflow-hidden">
+              <Image src="/hero.jpg"  alt="hero" fill className="object-cover" />
+            </div>
+          </div>
       </div>
     </div>
   );
