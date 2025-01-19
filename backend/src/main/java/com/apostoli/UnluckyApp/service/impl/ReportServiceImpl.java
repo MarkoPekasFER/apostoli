@@ -52,7 +52,7 @@ public class ReportServiceImpl implements ReportService {
         if (report == null) {
             return false;
         }
-        report.setStatus(ReportStatus.APPROVED);
+        report.setStatus(ReportStatus.ACTIVE);
         reportRepository.save(report);
         return true;
     }
@@ -62,10 +62,22 @@ public class ReportServiceImpl implements ReportService {
         if (report == null) {
             return false;
         }
-        report.setStatus(ReportStatus.REJECTED);
+        report.setStatus(ReportStatus.FALSE);
         reportRepository.save(report);
         return true;
     }
+
+    public boolean resolveReport(Long reportId) {
+        Report report = reportRepository.findById(reportId).orElse(null);
+        if (report == null) {
+            return false;
+        }
+        report.setStatus(ReportStatus.RESOLVED);
+        reportRepository.save(report);
+        return true;
+    }
+
+
 
 
 }

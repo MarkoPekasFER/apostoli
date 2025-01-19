@@ -1,7 +1,6 @@
 package com.apostoli.UnluckyApp.controller;
 
 import com.apostoli.UnluckyApp.model.entity.Report;
-import com.apostoli.UnluckyApp.service.ReportService;
 import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +44,12 @@ public class ReportController {
     private boolean rejectReport(@PathVariable Long reportId) {
         return reportService.rejectReport(reportId);
     }
+
+    @PostMapping("/resolve/{reportId}")
+    private boolean resolveReport(@PathVariable Long reportId) {
+        return reportService.resolveReport(reportId);
+    }
+
 
 
 
