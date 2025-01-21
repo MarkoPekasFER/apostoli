@@ -24,7 +24,6 @@ public class OrganisationController {
     public void createOrganisation(@RequestBody Organisation organisation, Principal principal) {
         String owner = principal.getName();
         organisationService.createOrganisation(organisation, owner);
-
     }
 
 
@@ -43,6 +42,7 @@ public class OrganisationController {
         organisationService.deleteOrganisation(principal.getName(), orgName);
     }
 
+    //Ovo popravit tkd se zove samo u mailu
   @PostMapping("/removeMember/{orgName}/{username}")
   public void removeMember(Principal principal, @PathVariable String username, @PathVariable String orgName) {
     organisationService.removeUserFromOrg(orgName, principal.getName() , username);

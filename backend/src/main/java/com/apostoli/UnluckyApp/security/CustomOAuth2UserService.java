@@ -67,7 +67,7 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                 // Create and return the CustomOAuth2User
                 return new CustomOAuth2User(user, attributes);
             } else {
-                System.out.println("Token verification failed");
+                //System.out.println("Token verification failed");
                 return null;
             }
         } catch (Exception e) {

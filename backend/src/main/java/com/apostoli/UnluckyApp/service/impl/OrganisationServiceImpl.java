@@ -27,12 +27,14 @@ public class OrganisationServiceImpl {
     final private AppUserRepository appUserRepository;
 
     final private OrganisationRepository organisationRepository;
+    final private RoleServiceImpl roleService;
 
     @Autowired
-    public OrganisationServiceImpl(ReportServiceImpl reportService, AppUserRepository appUserRepository, OrganisationRepository organisationRepository) {
+    public OrganisationServiceImpl(ReportServiceImpl reportService, AppUserRepository appUserRepository, OrganisationRepository organisationRepository, RoleServiceImpl roleService) {
         this.reportService = reportService;
         this.appUserRepository = appUserRepository;
         this.organisationRepository = organisationRepository;
+        this.roleService = roleService;
     }
 
     public List<Organisation> fetchAllOrganisations() {
@@ -45,19 +47,27 @@ public class OrganisationServiceImpl {
         if(owner == null){
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found");
         }
+
+        Role organisationRole = roleService.findByName(RoleType.ORGANISATION);
+
         organisation.setName(organisation.getName());
         organisation.setEmail(organisation.getEmail());
         List<AppUser> members = new ArrayList<>();
         List<Role> roles= owner.getRoles();
-        roles.add(new Role(RoleType.ORGANISATION));
+
+        if (!roles.contains(organisationRole)) {
+            roles.add(organisationRole);
+        }
+
         owner.setRoles(roles);
         owner.setOrganisation(organisation);
         owner.setOrgRank(OrgRank.OWNER);
         members.add(owner);
         organisation.setMembers(members);
 
-        appUserRepository.save(owner);
+
         organisationRepository.save(organisation);
+        appUserRepository.save(owner);
     }
 
     public Optional<Organisation> fetchOrganisationById(Long id) {
@@ -173,6 +183,7 @@ public class OrganisationServiceImpl {
         int rank = user.getOrgRank().ordinal();
         rank++;
         if (rank > OrgRank.values().length - 1) {
+            System.out.println("Maksimalni rang dosegnut za korisnika: " + member);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot promote user any further");
         }
         user.setOrgRank(OrgRank.values()[rank]);
