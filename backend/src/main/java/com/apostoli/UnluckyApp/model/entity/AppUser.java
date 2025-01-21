@@ -1,5 +1,6 @@
 package com.apostoli.UnluckyApp.model.entity;
 
+import com.apostoli.UnluckyApp.model.enums.OrgRank;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -29,8 +30,18 @@ public class AppUser {
    // @Column(nullable = false)
     private String email;
 
+    @ManyToOne
+    @JoinColumn(name = "organisation_id")
+    private Organisation organisation;
 
     private boolean verified;
+
+    @Enumerated(EnumType.STRING)
+    private OrgRank orgRank;
+
+    @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
+    private List<Role> roles;
+
 
     public AppUser(String username, String password, String email) {
         this.username = username;
@@ -45,15 +56,14 @@ public class AppUser {
                 ", username='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", email='" + email + '\'' +
+                ", organisation=" + organisation +
                 ", verified=" + verified +
+                ", orgRank=" + orgRank +
                 ", roles=" + roles +
                 '}';
     }
 
-    @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
-    private List<Role> roles;
 
-    //public Organisation organisation;
 
 
 }

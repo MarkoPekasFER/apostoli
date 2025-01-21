@@ -27,4 +27,15 @@ public class Organisation {
 
     @OneToMany
     private List<AppUser> members;
+
+    public Organisation(String name, String email, List<AppUser> members) {
+        this.name = name;
+        this.email = email;
+        this.members = members;
+    }
+
+    public Organisation(String name, String email) {
+        this.name = name;
+        this.email = email;
+    }
 }
