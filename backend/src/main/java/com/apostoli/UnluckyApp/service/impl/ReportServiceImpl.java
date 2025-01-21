@@ -39,7 +39,8 @@ public class ReportServiceImpl implements ReportService {
         report.setReportDateTime(LocalDateTime.now());
         report.setStatus(ReportStatus.PENDING);
         report.setUser(appUserService.fetchUserInfoByUsername(username).orElse(null));
-        //TODO: add logic to set the photos
+
+
         return reportRepository.save(report);
     }
 
