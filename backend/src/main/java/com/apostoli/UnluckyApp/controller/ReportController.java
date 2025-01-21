@@ -53,9 +53,6 @@ public class ReportController {
         if (files != null && !files.isEmpty()) {
             for (MultipartFile file : files) {
                 try {
-                    System.out.println("file name = " + file.getOriginalFilename());
-                    System.out.println("file type = " + file.getContentType());
-                    System.out.println("file size = " + file.getSize());
                     photoService.uploadPhoto(savedReport.getId(), file);
                 } catch (IOException e) {
                     return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();

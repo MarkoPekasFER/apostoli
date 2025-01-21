@@ -1,6 +1,7 @@
 package com.apostoli.UnluckyApp.model.entity;
 
 import com.apostoli.UnluckyApp.model.enums.OrgRank;
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -32,6 +33,7 @@ public class AppUser {
 
     @ManyToOne
     @JoinColumn(name = "organisation_id")
+    @JsonBackReference
     private Organisation organisation;
 
     private boolean verified;

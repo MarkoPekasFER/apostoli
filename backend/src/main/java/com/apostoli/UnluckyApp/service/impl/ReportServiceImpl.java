@@ -41,7 +41,8 @@ public class ReportServiceImpl implements ReportService {
         report.setUser(appUserService.fetchUserInfoByUsername(username).orElse(null));
 
 
-        return reportRepository.save(report);
+         reportRepository.save(report);
+         return report;
     }
 
     public List<Report> fetchAllReports() {
