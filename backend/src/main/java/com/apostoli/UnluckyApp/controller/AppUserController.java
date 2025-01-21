@@ -74,9 +74,7 @@ public class AppUserController {
     public ResponseEntity<String> confirmEmail(@RequestParam("token") String token) {
         boolean isConfirmed = emailTokenService.confirmToken(token);
         if (isConfirmed) {
-            return ResponseEntity.status(HttpStatus.FOUND)
-                    .header("Location", "http://apostoli.markopekas.com")
-                    .build();
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token Confirmed");
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found");
         }
