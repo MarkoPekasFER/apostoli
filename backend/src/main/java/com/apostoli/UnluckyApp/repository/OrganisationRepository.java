@@ -1,5 +1,6 @@
 package com.apostoli.UnluckyApp.repository;
 
+
 import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Organisation;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -15,5 +16,4 @@ public interface OrganisationRepository extends JpaRepository<Organisation,Long>
 
     Optional<Organisation> findByName(String name);
 
-    Organisation findByMember(String name);
 }

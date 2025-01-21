@@ -33,7 +33,6 @@ public class JwtService {
                 .setSubject(username)
                 .claim("username", username)
                 .claim("roles", role.stream().map(roles -> roles.getName().name()).collect(Collectors.toList()))
-                .claim("verified", false)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //24 Hours
                 .signWith(getSigningKey())
