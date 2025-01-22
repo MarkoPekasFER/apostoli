@@ -33,9 +33,9 @@ public class InstructionController {
 
     @PostMapping("/{disasterType}")
     public List<Instruction> getInstructionByDisasterType(@PathVariable DisasterType disasterType){
-      return instructionService.fetchByDisasterType(disasterType);
+        return instructionService.fetchByDisasterType(disasterType);
     }
 
     @PostMapping("/all")
-    public  List<Instruction> getAllInstructions(){ return instructionService.fetchAllInstructions(); }
+    public List<Instruction> getAllInstructions(){ return instructionService.fetchAllInstructions(); }
 }

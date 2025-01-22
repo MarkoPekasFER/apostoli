@@ -32,7 +32,7 @@ public class ShelterController {
 
     @PostMapping("/{cityName}")
     public List<Shelter> getSheltersByCityName(@PathVariable String cityName){
-       return shelterService.fetchSheltersByCity(cityName);
+        return shelterService.fetchSheltersByCity(cityName);
     }
 
     @PostMapping("/all")

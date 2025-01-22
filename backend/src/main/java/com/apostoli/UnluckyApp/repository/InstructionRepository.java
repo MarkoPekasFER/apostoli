@@ -11,6 +11,5 @@ import java.util.Optional;
 public interface InstructionRepository extends JpaRepository<Instruction,Long> {
 
     List<Instruction> getByDisasterType(DisasterType disasterType);
-
     Optional<Instruction> getByTitle(String title);
 }

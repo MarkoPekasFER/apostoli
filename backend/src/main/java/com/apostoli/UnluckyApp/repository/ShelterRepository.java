@@ -12,6 +12,5 @@ import java.util.Optional;
 public interface ShelterRepository extends JpaRepository<Shelter,Long> {
 
     List<Shelter> findByCity(City city);
-
     Optional<Shelter> findByName(String name);
 }

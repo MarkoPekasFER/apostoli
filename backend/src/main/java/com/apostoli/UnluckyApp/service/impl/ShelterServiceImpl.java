@@ -100,7 +100,7 @@ public class ShelterServiceImpl {
         }
 
         if(!allowed){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this resource.");
         }
 
         shelterRepository.deleteById(shelterID);
