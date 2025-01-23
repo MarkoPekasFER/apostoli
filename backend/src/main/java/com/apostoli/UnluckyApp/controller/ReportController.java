@@ -1,12 +1,13 @@
 package com.apostoli.UnluckyApp.controller;
 
-import com.apostoli.UnluckyApp.model.entity.PhotoResponse;
+import com.apostoli.UnluckyApp.model.dto.ReportDTO;
+import com.apostoli.UnluckyApp.model.dto.ReportWithPhotoResponse;
+import com.apostoli.UnluckyApp.model.dto.PhotoResponse;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.service.impl.PhotoServiceImpl;
 import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -18,7 +19,6 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
-import static org.springframework.http.MediaType.IMAGE_PNG_VALUE;
 
 @RestController
 @RequestMapping("/api/v1/report")
@@ -66,18 +66,24 @@ public class ReportController {
 
 
     @GetMapping("/all")
-    public List<Report> fetchALlReports() {
-        return reportService.fetchAllReports();
+    public List<ReportDTO> fetchALlReports() {
+       return reportService.fetchAllReports();
     }
 
-    @GetMapping("/{reportId}/photos")
-    public List<PhotoResponse> downloadImage(@PathVariable Long reportId) {
+    @GetMapping("/get/{reportId}")
+    public ReportWithPhotoResponse fetchReportwithPhotos(@PathVariable Long reportId) {
+
+        Report report = reportService.getReportById(reportId);
+
         List<byte[]> album = photoServiceImpl.downloadImage(reportId);
         List<PhotoResponse> response = new ArrayList<>();
-        for (byte[] imageData : album) {
-            response.add(new PhotoResponse(imageData));
+
+        if(!album.isEmpty()){
+            for (byte[] imageData : album) {
+                response.add(new PhotoResponse(imageData));
+            }
         }
-        return response;
+        return new ReportWithPhotoResponse(report, response);
     }
 
 

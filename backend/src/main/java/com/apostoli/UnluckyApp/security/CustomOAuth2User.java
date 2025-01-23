@@ -19,7 +19,7 @@ public record CustomOAuth2User(AppUser appUser, Map<String, Object> attributes) 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return appUser.getRoles().stream()
-                .map(role -> new SimpleGrantedAuthority(role.getName().name()))
+                .map(role -> new SimpleGrantedAuthority("ROLE_" + role.getName().name()))
                 .collect(Collectors.toList());
     }
 

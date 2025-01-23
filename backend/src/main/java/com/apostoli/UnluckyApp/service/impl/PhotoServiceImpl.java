@@ -60,7 +60,6 @@ public class PhotoServiceImpl implements PhotoService {
 
         album.add(photoToSave);
         reportRepository.save(report);
-        photoRepository.save(photoToSave);
     }
 
     @Transactional

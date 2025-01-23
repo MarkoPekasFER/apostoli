@@ -1,5 +1,8 @@
 package com.apostoli.UnluckyApp.service.impl;
 
+import com.apostoli.UnluckyApp.model.dto.AppUserDTO;
+import com.apostoli.UnluckyApp.model.dto.OrganisationDTO;
+import com.apostoli.UnluckyApp.model.dto.ReportDTO;
 import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Organisation;
 import com.apostoli.UnluckyApp.model.entity.Report;
@@ -17,6 +20,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class OrganisationServiceImpl {
@@ -37,8 +41,11 @@ public class OrganisationServiceImpl {
         this.roleService = roleService;
     }
 
-    public List<Organisation> fetchAllOrganisations() {
-        return organisationRepository.findAll();
+    public List<OrganisationDTO> fetchAllOrganisations() {
+        return organisationRepository.findAll()
+                .stream()
+                .map(this::mapToOrgDto)
+                .collect(Collectors.toList());
     }
 
     public void createOrganisation(Organisation organisation, String username) {
@@ -48,9 +55,14 @@ public class OrganisationServiceImpl {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Owner not found");
         }
 
+        if(!owner.isVerified()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Owner not verified");
+        }
+
         Role organisationRole = roleService.findByName(RoleType.ORGANISATION);
 
         organisation.setName(organisation.getName());
+        organisation.setDescription(organisation.getDescription());
         organisation.setEmail(organisation.getEmail());
         List<AppUser> members = new ArrayList<>();
         List<Role> roles= owner.getRoles();
@@ -82,7 +94,7 @@ public class OrganisationServiceImpl {
 
         checkInOrg(username, orgName);
 
-        Organisation organisation = organisationRepository.findByName(orgName).orElse(null);
+        Organisation organisation = fetchOrganisationByName(orgName).orElse(null);
         AppUser owner = appUserRepository.findByUsername(username).orElse(null);
 
 
@@ -93,6 +105,9 @@ public class OrganisationServiceImpl {
         Long id = organisation.getId();
 
         for (AppUser member : organisation.getMembers()) {
+            List<Role> roles = member.getRoles();
+            roles.removeIf(role -> RoleType.ORGANISATION.equals(role.getName()));
+            member.setRoles(roles);
             member.setOrganisation(null);
             member.setOrgRank(null);
             appUserRepository.save(member);
@@ -105,7 +120,7 @@ public class OrganisationServiceImpl {
 
         checkInOrg(username, orgName);
 
-        Organisation organisation = organisationRepository.findByName(orgName).orElse(null); //org
+        Organisation organisation = fetchOrganisationByName(orgName).orElse(null); //org
 
         AppUser member = appUserRepository.findByUsername(username).orElse(null); //The one adding
         AppUser appUser = appUserRepository.findByUsername(newMember).orElse(null); //Add this to ORG
@@ -168,6 +183,29 @@ public class OrganisationServiceImpl {
         organisationRepository.save(organisation);
     }
 
+    public void rejectUser(String orgName, String admin, String member) {
+
+        checkInOrg(admin, orgName);
+
+        Organisation organisation = organisationRepository.findByName(orgName).orElse(null);
+        AppUser adminUser = appUserRepository.findByUsername(admin).orElse(null);
+        AppUser user = appUserRepository.findByUsername(member).orElse(null);
+
+        if(adminUser.getOrgRank().equals(OrgRank.VOLUNTEER)){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User not authorized to reject members");
+        }
+
+        List<AppUser> pendingMembers = organisation.getPendingMembers();
+
+        if (!pendingMembers.contains(user)) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "User not pending");
+        }
+
+        pendingMembers.remove(user);
+        organisation.setPendingMembers(pendingMembers);
+        organisationRepository.save(organisation);
+    }
+
     public void promoteUser(String orgName,String admin, String member) {
 
         checkInOrg(member, orgName);
@@ -211,16 +249,30 @@ public class OrganisationServiceImpl {
         appUserRepository.save(user);
     }
 
-    public List<Report> getPending(String user) {
+    public List<ReportDTO> getPendingReports(String user) {
 
         checkRole(user);
 
-        List<Report> reports = reportService.fetchAllReports();
+        List<ReportDTO> reports = reportService.fetchAllReports();
 
         return reports.stream()
                 .filter(report -> ReportStatus.PENDING.equals(report.getStatus()))
                 .toList();
     }
+
+    public List<AppUserDTO> getPendingMembers(String user, String orgName){
+
+        checkRole(user);
+        Organisation organisation = fetchOrganisationByName(orgName).orElse(null);
+        if(organisation == null){
+            throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Organisation not found");
+        }
+
+        return organisation.getPendingMembers().stream()
+                .map(this::mapToDTO)
+                .collect(Collectors.toList());
+    }
+
 
     private void checkInOrg(String user, String orgName) {
         AppUser appUser = appUserRepository.findByUsername(user).orElse(null);
@@ -249,5 +301,26 @@ public class OrganisationServiceImpl {
     private boolean checkHierarchy(AppUser user, AppUser target) {
         return user.getOrgRank().ordinal() < target.getOrgRank().ordinal();
     }
+
+    private AppUserDTO mapToDTO(AppUser user) {
+        return new AppUserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRoles().getLast().getName(),
+                user.getOrganisation().getName(),
+                user.getOrgRank().name()
+        );
+    }
+
+    private OrganisationDTO mapToOrgDto(Organisation organisation) {
+        return new OrganisationDTO(
+                organisation.getId(),
+                organisation.getName(),
+                organisation.getDescription(),
+                organisation.getMembers().stream().map(AppUser::getUsername).toList()
+        );
+    }
+
 
 }

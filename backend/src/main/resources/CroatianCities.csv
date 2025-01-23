@@ -53,7 +53,7 @@ Slatina,Slatina,45.7022,17.7011,Croatia,HR,HRV,Virovitičko-Podravska Županija,
 Gospić,Gospic,44.546,15.375,Croatia,HR,HRV,Ličko-Senjska Županija,admin,11502.0,1191887616
 Novska,Novska,45.3333,16.9833,Croatia,HR,HRV,Sisačko-Moslavačka Županija,minor,11137.0,1191890693
 Nedelišće,Nedelisce,46.3833,16.3833,Croatia,HR,HRV,Međimurska Županija,minor,11017.0,1191055882
-Matulji,Matulji,45.3667,14.3167,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,10773.0,1191059723
+Matulji,Matulji,45.3667,14.3167,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,10773.0,1191059723`
 Brdovec,Brdovec,45.8667,15.7667,Croatia,HR,HRV,Zagrebačka Županija,minor,10737.0,1191376654
 Opatija,Opatija,45.3333,14.3,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,10619.0,1191982660
 Labin,Labin,45.0833,14.1167,Croatia,HR,HRV,Istarska Županija,minor,10424.0,1191000718
@@ -74,3 +74,18 @@ Zabok,Zabok,46.0333,15.9167,Croatia,HR,HRV,Krapinsko-Zagorska Županija,minor,86
 Vodice,Vodice,43.75,15.7667,Croatia,HR,HRV,Šibensko-Kninska Županija,minor,8649.0,1191637879
 Garešnica,Garesnica,45.5667,16.9333,Croatia,HR,HRV,Bjelovarsko-Bilogorska Županija,minor,8624.0,1191726833
 Pazin,Pazin,45.2403,13.9367,Croatia,HR,HRV,Istarska Županija,admin,8279.0,1191654566
+Otocac,Otočac,44.874422,15.227529,Croatia,HR,HRV,Ličko-Senjska Županija,minor,8279.0,1191054241
+Losinj,Losinj,44.517818,14.486124,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,7920.0,1191054241
+Vis,Vis,43.044721,16.151765,Croatia,HR,HRV,Splitsko-Dalmatinska Županija,minor,7920.0,1191054241
+Korcula,Korcula,42.930856,16.890429,Croatia,HR,HRV,Dubrovačko-Neretvanska Županija,minor,7920.0,1191054241
+Cres,Cres,44.825664,14.406312,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,7920.0,1191054241
+Pag,Pag,44.469684,14.991187,Croatia,HR,HRV,Zadarska Županija,minor,7920.0,1191054241
+Bruvno,Bruvno,44.393179,15.903788,Croatia,HR,HRV,Ličko-Senjska Županija,minor,7920.0,1191054241
+Prijeboj,Prijeboj,44.836198,15.689762,Croatia,HR,HRV,Ličko-Senjska Županija,minor,7920.0,1191054241
+Slunj,Slunj,45.112697,15.580069,Croatia,HR,HRV,Karlovačka Županija,minor,7920.0,1191054241
+Vojnic,Vojnic,45.322925,15.694823,Croatia,HR,HRV,Karlovačka Županija,minor,7920.0,1191054241
+Mackovo Selo,Mackovo Selo,45.280572,16.298621,Croatia,HR,HRV,Koprivničko-Križevačka Županija,minor,7920.0,1191054241
+Mljet,Mljet,42.739729,17.519410,Croatia,HR,HRV,Dubrovačko-Neretvanska Županija,minor,7920.0,1191054241
+Rab,Rab,44.762255, 14.791699,Croatia,HR,HRV,Primorsko-Goranska Županija,minor,7920.0,1191054241
+Kornati,Kornati,43.805724, 15.307808,Croatia,HR,HRV,Šibensko-Kninska Županija,minor,7920.0,1191054241
+Hvar,Hvar,43.169106, 16.446982,Croatia,HR,HRV,Splitsko-Dalmatinska Županija,minor,7920.0,1191054241

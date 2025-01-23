@@ -30,30 +30,7 @@ public class InstructionServiceImpl {
 
     public List<Instruction> fetchAllInstructions(){ return instructionRepository.findAll(); }
 
-    public void createInstruction(Instruction instruction,String username){
-
-        AppUser user = appUserRepository.findByUsername(username).orElse(null);
-
-        List<RoleType> allowedRoles = new ArrayList<>();
-
-        allowedRoles.add(RoleType.SUPER_ADMIN);
-        allowedRoles.add(RoleType.ADMIN);
-        allowedRoles.add(RoleType.RESPONDER);
-        allowedRoles.add(RoleType.ORGANISATION);
-
-
-        boolean allowed=false;
-
-        List<Role> roles = user.getRoles();
-
-        for(int i=0;i<roles.size();i++){
-            if(allowedRoles.contains(roles.get(i)))
-                allowed=true;
-        }
-
-        if(!allowed){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to access this resource.");
-        }
+    public void createInstruction(Instruction instruction){
 
         instruction.setTitle(instruction.getTitle());
         instruction.setDescription(instruction.getDescription());
@@ -69,26 +46,6 @@ public class InstructionServiceImpl {
 
         AppUser user = appUserRepository.findByUsername(username).orElse(null);
 
-        List<RoleType> allowedRoles = new ArrayList<>();
-
-        allowedRoles.add(RoleType.SUPER_ADMIN);
-        allowedRoles.add(RoleType.ADMIN);
-        allowedRoles.add(RoleType.RESPONDER);
-        allowedRoles.add(RoleType.ORGANISATION);
-
-
-        boolean allowed=false;
-
-        List<Role> roles = user.getRoles();
-
-        for(int i=0;i<roles.size();i++){
-            if(allowedRoles.contains(roles.get(i)))
-                allowed=true;
-        }
-
-        if(!allowed){
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "You do not have permission to delete this resource.");
-        }
 
         instructionRepository.delete(instruction);
 

@@ -1,4 +1,4 @@
-package com.apostoli.UnluckyApp.model.entity;
+package com.apostoli.UnluckyApp.model.dto;
 
 public class PhotoResponse {
 

@@ -6,7 +6,9 @@ import com.apostoli.UnluckyApp.model.entity.Location;
 import com.apostoli.UnluckyApp.repository.LocationRepository;
 import com.apostoli.UnluckyApp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 @Service
 public class LocationServiceImpl implements LocationService {
@@ -44,6 +46,12 @@ public class LocationServiceImpl implements LocationService {
                 nearestCity = city;
             }
         }
+
+        // Provjera je li najbliži grad udaljen više od 30 km
+        if (minDistance > 35) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Location is outside of Croatia");
+        }
+
         return nearestCity;
     }
 

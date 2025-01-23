@@ -11,8 +11,8 @@ public class SwaggerConfiguration {
 
     @Bean
     public OpenAPI api(){
-        return new OpenAPI().info(new Info().title("Rimatch API")
-                .description("Rimatch daing application")
+        return new OpenAPI().info(new Info().title("APOSTOLI API")
+                .description("API for Apostoli")
                 .version("v0.0.1")
                 .license(new License().name("Apache 2.0").url("http://springdoc.org"))
         );

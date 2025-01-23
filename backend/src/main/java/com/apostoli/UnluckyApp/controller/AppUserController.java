@@ -22,11 +22,13 @@ public class AppUserController {
 
     private final AppUserServiceImpl userService;
     private final EmailTokenService emailTokenService;
+    private final AppUserServiceImpl appUserServiceImpl;
 
     @Autowired
-    public AppUserController(AppUserServiceImpl userService, EmailTokenService emailTokenService) {
+    public AppUserController(AppUserServiceImpl userService, EmailTokenService emailTokenService, AppUserServiceImpl appUserServiceImpl) {
         this.userService = userService;
         this.emailTokenService = emailTokenService;
+        this.appUserServiceImpl = appUserServiceImpl;
     }
 
     @PostMapping("/register")
@@ -63,7 +65,7 @@ public class AppUserController {
         return userService.fetchUserInfoByUsername(username);
     }
 
-    @GetMapping("/reports")
+    @GetMapping("/myReports")
     public List<Report> GetUserReports(Principal principal) {
         String username = principal.getName();
         AppUser user = userService.fetchUserInfoByUsername(username).orElse(null);
@@ -78,6 +80,42 @@ public class AppUserController {
         } else {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Token not found");
         }
+    }
+
+    @PostMapping("/joinOrg/{orgName}")
+    public ResponseEntity<String> requestToJoinOrg(Principal principal,@PathVariable String orgName) {
+        appUserServiceImpl.joinOrg(principal.getName(), orgName);
+        return ResponseEntity.status(HttpStatus.OK).body("Request sent");
+    }
+
+    @PostMapping("/leaveOrg/{orgName}")
+    public ResponseEntity<String> requestToLeaveOrg(Principal principal,@PathVariable String orgName) {
+        appUserServiceImpl.leaveOrg(principal.getName(), orgName);
+        return ResponseEntity.status(HttpStatus.OK).body("Request sent");
+    }
+
+
+    @GetMapping("/statsByCity/{city}")
+    public int getStatsByCity(@PathVariable String city) {
+        return appUserServiceImpl.getStatsByCity(city);
+    }
+    @GetMapping("/statsByDisaster/{disasterType}")
+    public int getStatsByDisaster(@PathVariable String disasterType) {
+        return appUserServiceImpl.getStatsByDisasterType(disasterType);
+    }
+    @GetMapping("/statsByDisasterAndCity/{city}/{disasterType}")
+    public int getStatsByDisaster(@PathVariable String city,@PathVariable String disasterType) {
+        return appUserServiceImpl.getStatsByCityAndDisasterType(city,disasterType);
+    }
+
+    @PostMapping("/promoteUser/{username}")
+    public void promoteUser(@PathVariable String username, Principal principal){
+        appUserServiceImpl.promoteRole(principal.getName(),username);
+    }
+
+    @PostMapping("/demoteUser/{username}")
+    public void demoteUser(@PathVariable String username, Principal principal){
+        appUserServiceImpl.demoteRole(principal.getName(),username);
     }
 
 

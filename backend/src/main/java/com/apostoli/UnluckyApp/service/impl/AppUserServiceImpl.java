@@ -4,29 +4,28 @@ import com.apostoli.UnluckyApp.config.EmailToken;
 import com.apostoli.UnluckyApp.config.EmailTokenRepository;
 import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.email.EmailSender;
-import com.apostoli.UnluckyApp.model.entity.AppUser;
-import com.apostoli.UnluckyApp.model.entity.Report;
-import com.apostoli.UnluckyApp.model.entity.Role;
+import com.apostoli.UnluckyApp.model.dto.AppUserDTO;
+import com.apostoli.UnluckyApp.model.entity.*;
+import com.apostoli.UnluckyApp.model.enums.DisasterType;
 import com.apostoli.UnluckyApp.model.enums.RoleType;
-import com.apostoli.UnluckyApp.repository.AppUserRepository;
-import com.apostoli.UnluckyApp.repository.ReportRepository;
+import com.apostoli.UnluckyApp.repository.*;
 import com.apostoli.UnluckyApp.security.JwtService;
 import com.apostoli.UnluckyApp.service.AppUserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.UUID;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 public class AppUserServiceImpl implements AppUserService {
@@ -46,15 +45,18 @@ public class AppUserServiceImpl implements AppUserService {
 
     private final RoleServiceImpl roleService;
     private final EmailTokenRepository emailTokenRepository;
+    private final OrganisationRepository organisationRepository;
+    private final LocationRepository locationRepository;
+    private final CityRepository cityRepository;
 
-    @Value("${link_za_email_testing}")
-    String link; //samo za testiranje
+   // @Value("${link_za_email_testing}")
+  //  String link; //samo za testiranje
 
-//    @Value("${link_za_email_prod}")
-//    String link; // za prod
+    @Value("${link_za_email_prod}")
+    String link; // za prod
 
     @Autowired
-    public AppUserServiceImpl(AppUserRepository userRepository, ReportRepository reportRepository, JwtService jwtService, EmailTokenService emailTokenService, EmailSender emailSender, AuthenticationManager authManager, RoleServiceImpl roleService, EmailTokenRepository emailTokenRepository) {
+    public AppUserServiceImpl(AppUserRepository userRepository, ReportRepository reportRepository, JwtService jwtService, EmailTokenService emailTokenService, EmailSender emailSender, AuthenticationManager authManager, RoleServiceImpl roleService, EmailTokenRepository emailTokenRepository, OrganisationRepository organisationRepository, LocationRepository locationRepository, CityRepository cityRepository) {
         this.userRepository = userRepository;
         this.reportRepository = reportRepository;
         this.jwtService = jwtService;
@@ -64,6 +66,9 @@ public class AppUserServiceImpl implements AppUserService {
         this.roleService = roleService;
         this.encoder = new BCryptPasswordEncoder(13);
         this.emailTokenRepository = emailTokenRepository;
+        this.organisationRepository = organisationRepository;
+        this.locationRepository = locationRepository;
+        this.cityRepository = cityRepository;
     }
 
     public void registerUser(AppUser user) {
@@ -93,7 +98,7 @@ public class AppUserServiceImpl implements AppUserService {
        // long afterTokenSaveTime = System.currentTimeMillis();
        // LOGGER.info("Time taken to save token: {} ms", (afterTokenSaveTime - afterUserSaveTime));
 
-        //String link = "http://aposotli.markopekas.com/api/v1/registration/confirm?token=" + token;
+       // String link = "http://aposotli.markopekas.com/api/v1/registration/confirm?token=" + token;
 
         link += token;
         emailSender.send(
@@ -108,10 +113,48 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
+    public void joinOrg(String orgName,String username){
+
+        Organisation org = organisationRepository.findByName(orgName).orElse(null);
+        AppUser user = userRepository.findByUsername(username).orElse(null);
+
+        if(org==null || user==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either org or user not found");
+        }
+        if (user.getOrgRank() != null){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "User already in an organisation");
+        }
+
+        org.getPendingMembers().add(user);
+        organisationRepository.save(org);
+
+    }
+
+    public void leaveOrg(String orgName,String username){
+
+        Organisation org = organisationRepository.findByName(orgName).orElse(null);
+        AppUser user = userRepository.findByUsername(username).orElse(null);
+
+        if(org==null || user==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either org or user not found");
+        }
+
+        if(org.getMembers().contains(user)) {
+            org.getMembers().remove(user);
+            user.setOrganisation(null);
+            user.setOrgRank(null);
+            organisationRepository.save(org);
+            userRepository.save(user);
+            throw new ResponseStatusException(HttpStatus.ACCEPTED, "User has left the organisation");
+        }
+    }
 
 
-    public List<AppUser> getAllUsers() {
-        return userRepository.findAll();
+    public List<AppUserDTO> getAllUsers() {
+            List<AppUser> users = userRepository.findAll();
+            return users.stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
     }
 
     public Optional<AppUser> fetchUserInfoByUsername(String username) {
@@ -133,6 +176,101 @@ public class AppUserServiceImpl implements AppUserService {
         } else {
             return "fail";
         }
+    }
+
+
+    public int getStatsByCity(String city){
+        City city1 = cityRepository.findByName(city).orElse(null);
+        return locationRepository.findByCity(city1).stream().toList().size();
+    }
+
+    public int getStatsByDisasterType(String disasterType){
+        DisasterType disasterType1 = DisasterType.valueOf(disasterType);
+        return reportRepository.findByDisasterType(disasterType1).stream().toList().size();
+    }
+
+    public int getStatsByCityAndDisasterType(String city, String disasterType) {
+        City city1 = cityRepository.findByName(city).orElse(null);
+        DisasterType disasterType1 = DisasterType.valueOf(disasterType);
+        return reportRepository.findByDisasterType(disasterType1)
+                .stream()
+                .filter(report -> report.getLocation().getCity().equals(city1))
+                .collect(Collectors.toSet()).size();
+    }
+
+    public void promoteRole(String superior, String target ){
+        AppUser superiorUser = userRepository.findByUsername(superior).orElse(null);
+        AppUser targetUser = userRepository.findByUsername(target).orElse(null);
+
+
+
+        if(superiorUser==null || targetUser==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either superior or target not found");
+        }
+
+        if(superiorUser.getRoles().size() < targetUser.getRoles().size()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Superior must have higher rank than target");
+        }
+
+
+        switch (targetUser.getRoles().size()) {
+            case 2:
+                targetUser.getRoles().add(roleService.findByName(RoleType.RESPONDER));
+                break;
+            case 3:
+                targetUser.getRoles().add(roleService.findByName(RoleType.ADMIN));
+                break;
+            case 4:
+                targetUser.getRoles().add(roleService.findByName(RoleType.SUPER_ADMIN));
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target already has highest rank");
+        }
+
+
+
+    }
+
+    public void demoteRole(String superior, String target ){
+        AppUser superiorUser = userRepository.findByUsername(superior).orElse(null);
+        AppUser targetUser = userRepository.findByUsername(target).orElse(null);
+
+        if(superiorUser==null || targetUser==null){
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either superior or target not found");
+        }
+
+        if(superiorUser.getRoles().size() > targetUser.getRoles().size()){
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Superior must have higher rank than target");
+        }
+
+
+        switch (targetUser.getRoles().size()) {
+            case 3:
+                targetUser.getRoles().remove(roleService.findByName(RoleType.RESPONDER));
+                break;
+            case 4:
+                targetUser.getRoles().remove(roleService.findByName(RoleType.ADMIN));
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Target already has lowest rank");
+        }
+
+
+
+    }
+
+
+
+
+    private AppUserDTO mapToDTO(AppUser user) {
+        return new AppUserDTO(
+                user.getId(),
+                user.getUsername(),
+                user.getEmail(),
+                user.getRoles().getLast().getName(),
+                user.getOrganisation().getName(),
+                user.getOrgRank().name()
+        );
     }
 
     private String buildEmail(String username, String link) {
@@ -203,5 +341,7 @@ public class AppUserServiceImpl implements AppUserService {
                 "\n" +
                 "</div></div>";
     }
+
+
 
 }
