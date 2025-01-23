@@ -1,6 +1,6 @@
 package com.apostoli.UnluckyApp.service.impl;
 
-import com.apostoli.UnluckyApp.model.entity.AppUser;
+import com.apostoli.UnluckyApp.model.dto.ReportDTO;
 import com.apostoli.UnluckyApp.model.entity.Location;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.model.enums.ReportStatus;
@@ -10,8 +10,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ReportServiceImpl implements ReportService {
@@ -45,8 +45,29 @@ public class ReportServiceImpl implements ReportService {
          return report;
     }
 
-    public List<Report> fetchAllReports() {
-        return reportRepository.findAll();
+    public List<ReportDTO> fetchAllReports() {
+            List<Report> reports = reportRepository.findAll();
+            return reports.stream()
+                    .map(this::mapToDTO)
+                    .collect(Collectors.toList());
+    }
+
+    private ReportDTO mapToDTO(Report report) {
+        return new ReportDTO(
+                report.getId(),
+                report.getDisasterType(),
+                report.getLocation(),
+                report.getReportDateTime(),
+                report.getDescription(),
+                report.getStatus(),
+                report.getUser().getUsername()
+        );
+    }
+
+
+    public Report getReportById(Long reportId) {
+        return reportRepository.findById(reportId)
+                .orElseThrow(() -> new RuntimeException("Report with id " + reportId + " not found"));
     }
 
 

@@ -25,8 +25,13 @@ public class Organisation {
     @Column(nullable = false)
     private String email;
 
+    private String description;
+
     @OneToMany
     private List<AppUser> members;
+
+    @OneToMany
+    private List<AppUser> pendingMembers;
 
     public Organisation(String name, String email, List<AppUser> members) {
         this.name = name;

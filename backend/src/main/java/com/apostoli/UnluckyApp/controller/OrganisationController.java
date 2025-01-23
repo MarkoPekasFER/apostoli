@@ -1,5 +1,9 @@
 package com.apostoli.UnluckyApp.controller;
 
+import com.apostoli.UnluckyApp.model.dto.AppUserDTO;
+import com.apostoli.UnluckyApp.model.dto.OrganisationDTO;
+import com.apostoli.UnluckyApp.model.dto.ReportDTO;
+import com.apostoli.UnluckyApp.model.entity.AppUser;
 import com.apostoli.UnluckyApp.model.entity.Organisation;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.service.impl.OrganisationServiceImpl;
@@ -27,13 +31,13 @@ public class OrganisationController {
     }
 
 
-    @GetMapping("/retrievePending")
-    public List<Report> getPendingReports(Principal principal) {
-      return  organisationService.getPending(principal.getName());
+    @GetMapping("/retrievePendingReports")
+    public List<ReportDTO> fetchPendingReports(Principal principal) {
+      return  organisationService.getPendingReports(principal.getName());
     }
 
     @GetMapping("/allOrganizations")
-    public List<Organisation> getAllOrganisations() {
+    public List<OrganisationDTO> getAllOrganisations() {
         return organisationService.fetchAllOrganisations();
     }
 
@@ -42,7 +46,7 @@ public class OrganisationController {
         organisationService.deleteOrganisation(principal.getName(), orgName);
     }
 
-    //Ovo popravit tkd se zove samo u mailu
+    //Ovo popravit tkd se zove samo u mailu ..ne
   @PostMapping("/removeMember/{orgName}/{username}")
   public void removeMember(Principal principal, @PathVariable String username, @PathVariable String orgName) {
     organisationService.removeUserFromOrg(orgName, principal.getName() , username);
@@ -62,6 +66,15 @@ public class OrganisationController {
   public void demoteMember(Principal principal, @PathVariable String username, @PathVariable String orgName) {
     organisationService.demoteUser(orgName, principal.getName(), username);
   }
+
+  @PostMapping("/getPendingMembers/{orgName}")
+  public List<AppUserDTO> fetchPendingMembers(Principal principal, @PathVariable String orgName){
+      return organisationService.getPendingMembers(principal.getName(), orgName);
+  }
+
+  @PostMapping("/rejectUser/{orgName}/{username}")
+  public void fetchPendingMembers(Principal principal, @PathVariable String orgName,@PathVariable String username){
+         organisationService.rejectUser(orgName, principal.getName(), username);}
 
 
 

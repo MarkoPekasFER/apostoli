@@ -1,10 +1,7 @@
 package com.apostoli.UnluckyApp.model.entity;
 
 import com.apostoli.UnluckyApp.model.enums.DisasterType;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -29,5 +26,9 @@ public class Instruction {
     private String description;
 
     private DisasterType disasterType;
+
+    @ManyToOne
+    private Contact contact;
+
 
 }

@@ -32,7 +32,7 @@ public class JwtService {
                 .setIssuer(ISSUER)
                 .setSubject(username)
                 .claim("username", username)
-                .claim("roles", role.stream().map(roles -> roles.getName().name()).collect(Collectors.toList()))
+                .claim("roles", role.stream().map(roles -> "ROLE_"+roles.getName().name()).collect(Collectors.toList()))
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 24)) //24 Hours
                 .signWith(getSigningKey())
@@ -40,7 +40,7 @@ public class JwtService {
 
     }
 
-    private SecretKey getSigningKey() {
+    public SecretKey getSigningKey() {
         byte[] keyBytes = SECRET.getBytes();
         return new SecretKeySpec(keyBytes, SignatureAlgorithm.HS512.getJcaName());
     }

@@ -17,8 +17,11 @@ import lombok.RequiredArgsConstructor;
 
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -59,13 +62,24 @@ public class CustomOAuth2UserService extends DefaultOAuth2UserService {
                             // Add the user with the USER role
                             Role userRole = roleRepository.findByName(RoleType.USER)
                                     .orElseThrow(() -> new IllegalStateException("Role not found"));
-                            newUser.setRoles(Collections.singletonList(userRole));
+                            List<Role> roles = new ArrayList<>();
+                            roles.add(userRole);
+                            roles.stream().map(role -> "ROLE_"+role.getName().name()).collect(Collectors.toList());
+
+                            newUser.setRoles(roles);
                             newUser.setVerified(true);
                             return userRepository.save(newUser);
                         });
 
+                List<String> roleClaims = user.getRoles().stream()
+                        .map(role -> "ROLE_" + role.getName().name())
+                        .collect(Collectors.toList());
+
+                CustomOAuth2User customOAuth2User = new CustomOAuth2User(user, attributes);
+                customOAuth2User.getAttributes().put("roles", roleClaims);
+
                 // Create and return the CustomOAuth2User
-                return new CustomOAuth2User(user, attributes);
+                return customOAuth2User;
             } else {
                 //System.out.println("Token verification failed");
                 return null;

@@ -23,7 +23,7 @@ public class InstructionController {
 
     @PostMapping("/create")
     public void createInstruction(@RequestBody Instruction instruction, Principal principal){
-        instructionService.createInstruction(instruction,principal.getName());
+        instructionService.createInstruction(instruction);
     }
 
     @PostMapping("/delete/{instructionID}")
