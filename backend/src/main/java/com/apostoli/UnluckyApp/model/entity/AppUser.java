@@ -28,7 +28,7 @@ public class AppUser {
     @Column(nullable = true)
     private String password;
 
-   // @Column(nullable = false)
+    @Column(nullable = false)
     private String email;
 
     @ManyToOne
@@ -44,6 +44,9 @@ public class AppUser {
     @ManyToMany(fetch = FetchType.EAGER) // Fetch roles eagerly
     private List<Role> roles;
 
+    @OneToMany
+    private List<City> cities;
+    //For which cities do you wish to receive alerts from?
 
     public AppUser(String username, String password, String email) {
         this.username = username;
@@ -62,10 +65,7 @@ public class AppUser {
                 ", verified=" + verified +
                 ", orgRank=" + orgRank +
                 ", roles=" + roles +
+                ", cities=" + cities +
                 '}';
     }
-
-
-
-
 }

@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class InstructionServiceImpl {
+public class InstructionServiceImpl implements com.apostoli.UnluckyApp.service.InstructionService {
 
     public InstructionRepository instructionRepository;
 
@@ -28,8 +28,10 @@ public class InstructionServiceImpl {
         this.appUserRepository=appUserRepository;
     }
 
+    @Override
     public List<Instruction> fetchAllInstructions(){ return instructionRepository.findAll(); }
 
+    @Override
     public void createInstruction(Instruction instruction){
 
         instruction.setTitle(instruction.getTitle());
@@ -40,7 +42,8 @@ public class InstructionServiceImpl {
 
     }
 
-    public void deleteInstruction(Long id,String username){
+    @Override
+    public void deleteInstruction(Long id, String username){
 
         Instruction instruction=instructionRepository.getById(id);
 
@@ -51,5 +54,6 @@ public class InstructionServiceImpl {
 
     }
 
+    @Override
     public List<Instruction> fetchByDisasterType(DisasterType disasterType) { return instructionRepository.getByDisasterType(disasterType); }
 }

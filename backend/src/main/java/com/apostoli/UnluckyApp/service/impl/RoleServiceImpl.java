@@ -3,13 +3,12 @@ package com.apostoli.UnluckyApp.service.impl;
 import com.apostoli.UnluckyApp.model.entity.Role;
 import com.apostoli.UnluckyApp.model.enums.RoleType;
 import com.apostoli.UnluckyApp.repository.RoleRepository;
-import com.apostoli.UnluckyApp.service.RoleService;
 import jakarta.annotation.PostConstruct;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class RoleServiceImpl implements RoleService {
+public class RoleServiceImpl implements com.apostoli.UnluckyApp.service.RoleService {
 
     private final RoleRepository roleRepository;
 
@@ -33,8 +32,8 @@ public class RoleServiceImpl implements RoleService {
         }
     }
 
-    @Override
     @PostConstruct
+    @Override
     public void initializeRoles() {
         for (RoleType roleType : RoleType.values()) {
             createRoleIfNotFound(roleType);
