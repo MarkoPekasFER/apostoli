@@ -5,7 +5,7 @@ import com.apostoli.UnluckyApp.model.entity.Location;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.model.enums.ReportStatus;
 import com.apostoli.UnluckyApp.repository.ReportRepository;
-import com.apostoli.UnluckyApp.service.ReportService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
-public class ReportServiceImpl implements ReportService {
+public class ReportServiceImpl implements com.apostoli.UnluckyApp.service.ReportService {
 
 
     private final ReportRepository reportRepository;
@@ -29,6 +29,7 @@ public class ReportServiceImpl implements ReportService {
         this.appUserService = appUserService;
     }
 
+    @Override
     public Report submitReport(Report report, String username) {
 
         Location location = report.getLocation();
@@ -45,6 +46,7 @@ public class ReportServiceImpl implements ReportService {
          return report;
     }
 
+    @Override
     public List<ReportDTO> fetchAllReports() {
             List<Report> reports = reportRepository.findAll();
             return reports.stream()
@@ -65,12 +67,14 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
+    @Override
     public Report getReportById(Long reportId) {
         return reportRepository.findById(reportId)
                 .orElseThrow(() -> new RuntimeException("Report with id " + reportId + " not found"));
     }
 
 
+    @Override
     public boolean rejectReport(Long reportId) {
         Report report = reportRepository.findById(reportId).orElse(null);
         if (report == null) {
@@ -81,6 +85,7 @@ public class ReportServiceImpl implements ReportService {
         return true;
     }
 
+    @Override
     public boolean resolveReport(Long reportId) {
         Report report = reportRepository.findById(reportId).orElse(null);
         if (report == null) {
@@ -92,6 +97,8 @@ public class ReportServiceImpl implements ReportService {
     }
 
 
+    @Override
+    @Transactional
     public boolean approveReport(Long reportId) {
         Report report = reportRepository.findById(reportId).orElse(null);
         if (report == null) {
@@ -99,6 +106,8 @@ public class ReportServiceImpl implements ReportService {
         }
         report.setStatus(ReportStatus.ACTIVE);
         reportRepository.save(report);
+
+        appUserService.notifyUsersByCity(report.getLocation().getCity().getName(), report.getDisasterType().toString(), reportId);
         return true;
     }
 

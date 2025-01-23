@@ -35,7 +35,9 @@ public class SecurityConfig {
                                 , "/api/v1/user/myReports"
                                 ,"/api/v1/report/submit"
                                 ,"/api/v1/user/joinOrg/{orgName}"
-                                ,"/api/v1/user/leaveOrg/{orgName}")
+                                ,"/api/v1/user/leaveOrg/{orgName}",
+                                "/api/v1/user/addCity/{cityName}",
+                                "/api/v1/user/removeCity/{cityName}")
                         .hasAnyRole("USER", "ADMIN", "SUPER_ADMIN", "RESPONDER", "ORGANISATION")
 
                         .requestMatchers("/api/v1/org/allOrganizations","/api/v1/org/create")

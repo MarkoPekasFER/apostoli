@@ -5,7 +5,6 @@ import com.apostoli.UnluckyApp.model.entity.Photo;
 import com.apostoli.UnluckyApp.model.entity.Report;
 import com.apostoli.UnluckyApp.repository.PhotoRepository;
 import com.apostoli.UnluckyApp.repository.ReportRepository;
-import com.apostoli.UnluckyApp.service.PhotoService;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,7 +24,7 @@ import java.util.zip.Inflater;
 
 
 @Service
-public class PhotoServiceImpl implements PhotoService {
+public class PhotoServiceImpl implements com.apostoli.UnluckyApp.service.PhotoService {
 
 
     private final ReportRepository reportRepository;
@@ -40,6 +39,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
 
+    @Override
     public void uploadPhoto(Long reportId, MultipartFile file) throws IOException {
 
         Report report = reportRepository.findById(reportId)
@@ -63,6 +63,7 @@ public class PhotoServiceImpl implements PhotoService {
     }
 
     @Transactional
+    @Override
     public List<byte[]> downloadImage(Long reportId) {
         Optional<Report> reportOptional = reportRepository.findById(reportId);
 
@@ -128,15 +129,18 @@ public class PhotoServiceImpl implements PhotoService {
 
 
 
+    @Override
     public List<Photo> getPhotosByReportId(Long reportId) {
         return photoRepository.findByReportId(reportId);
     }
 
+    @Override
     public Photo getPhoto(Long photoId) {
         return photoRepository.findById(photoId)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Photo with id " + photoId + " not found"));
     }
 
+    @Override
     public void deletePhoto(Long photoId) {
         photoRepository.deleteById(photoId);
     }

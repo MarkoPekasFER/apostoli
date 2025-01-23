@@ -1,6 +1,5 @@
-package com.apostoli.UnluckyApp.config;
+package com.apostoli.UnluckyApp.model.entity;
 
-import com.apostoli.UnluckyApp.model.entity.AppUser;
 import jakarta.persistence.*;
 
 import lombok.Getter;

@@ -23,7 +23,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
-public class OrganisationServiceImpl {
+public class OrganisationServiceImpl implements com.apostoli.UnluckyApp.service.OrganisationService {
 
 
     final private ReportServiceImpl reportService;
@@ -41,6 +41,7 @@ public class OrganisationServiceImpl {
         this.roleService = roleService;
     }
 
+    @Override
     public List<OrganisationDTO> fetchAllOrganisations() {
         return organisationRepository.findAll()
                 .stream()
@@ -48,6 +49,7 @@ public class OrganisationServiceImpl {
                 .collect(Collectors.toList());
     }
 
+    @Override
     public void createOrganisation(Organisation organisation, String username) {
 
         AppUser owner = appUserRepository.findByUsername(username).orElse(null);
@@ -82,14 +84,17 @@ public class OrganisationServiceImpl {
         appUserRepository.save(owner);
     }
 
+    @Override
     public Optional<Organisation> fetchOrganisationById(Long id) {
         return organisationRepository.findById(id);
     }
 
+    @Override
     public Optional<Organisation> fetchOrganisationByName(String name) {
         return organisationRepository.findByName(name);
     }
 
+    @Override
     public void deleteOrganisation(String orgName, String username) {
 
         checkInOrg(username, orgName);
@@ -116,6 +121,7 @@ public class OrganisationServiceImpl {
         organisationRepository.deleteById(id);
     }
 
+    @Override
     public void addUserToOrg(String orgName, String username, String newMember) {
 
         checkInOrg(username, orgName);
@@ -152,7 +158,8 @@ public class OrganisationServiceImpl {
 
     }
 
-    public void removeUserFromOrg(String orgName, String member,String removeUsername) {
+    @Override
+    public void removeUserFromOrg(String orgName, String member, String removeUsername) {
 
         checkInOrg(member, orgName);
 
@@ -183,6 +190,7 @@ public class OrganisationServiceImpl {
         organisationRepository.save(organisation);
     }
 
+    @Override
     public void rejectUser(String orgName, String admin, String member) {
 
         checkInOrg(admin, orgName);
@@ -206,7 +214,8 @@ public class OrganisationServiceImpl {
         organisationRepository.save(organisation);
     }
 
-    public void promoteUser(String orgName,String admin, String member) {
+    @Override
+    public void promoteUser(String orgName, String admin, String member) {
 
         checkInOrg(member, orgName);
         checkInOrg(admin, orgName);
@@ -228,7 +237,8 @@ public class OrganisationServiceImpl {
         appUserRepository.save(user);
     }
 
-    public void demoteUser(String orgName,String admin, String member) {
+    @Override
+    public void demoteUser(String orgName, String admin, String member) {
 
         checkInOrg(member, orgName);
         checkInOrg(admin, orgName);
@@ -249,6 +259,7 @@ public class OrganisationServiceImpl {
         appUserRepository.save(user);
     }
 
+    @Override
     public List<ReportDTO> getPendingReports(String user) {
 
         checkRole(user);
@@ -260,6 +271,7 @@ public class OrganisationServiceImpl {
                 .toList();
     }
 
+    @Override
     public List<AppUserDTO> getPendingMembers(String user, String orgName){
 
         checkRole(user);

@@ -118,5 +118,15 @@ public class AppUserController {
         appUserServiceImpl.demoteRole(principal.getName(),username);
     }
 
+    @PostMapping("/addCity/{city}")
+    public void addCity(@PathVariable String city, Principal principal){
+        appUserServiceImpl.addCity(principal.getName(),city);
+    }
+
+    @PostMapping("/removeCity/{city}")
+    public void removeCity(@PathVariable String city, Principal principal){
+        appUserServiceImpl.removeCity(principal.getName(),city);
+    }
+
 
 }
