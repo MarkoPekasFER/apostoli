@@ -319,7 +319,7 @@ public class OrganisationServiceImpl implements com.apostoli.UnluckyApp.service.
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getRoles().getLast().getName(),
+                user.getRoles().get(user.getRoles().size()-1).getName(),
                 user.getOrganisation().getName(),
                 user.getOrgRank().name()
         );
