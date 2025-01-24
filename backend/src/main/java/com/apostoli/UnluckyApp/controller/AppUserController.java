@@ -118,5 +118,9 @@ public class AppUserController {
         appUserServiceImpl.demoteRole(principal.getName(),username);
     }
 
+    @PostMapping("/banUser/{username}")
+    public void banUser(@PathVariable String username, Principal principal){
+        appUserServiceImpl.banUser(principal.getName(),username);
+    }
 
 }
