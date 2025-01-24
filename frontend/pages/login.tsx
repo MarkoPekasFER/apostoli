@@ -114,5 +114,145 @@ function Login() {
     </div>
   );
 }
+// DRUGI JEZICI
+// return (
+//     <div className="w-full h-screen flex items-center justify-center p-4">
+//       <Card className="max-w-[350px] w-full">
+//         <CardHeader>
+//           <CardTitle className="text-3xl">Login :)</CardTitle>
+//           <CardDescription>
+//             Log in to your account or register here.
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <form onSubmit={handleSubmit}>
+//             <div className="grid w-full items-center gap-4">
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="username"
+//                   type="text"
+//                   placeholder="Username"
+//                   value={username}
+//                   onChange={(e) => setUsername(e.target.value)}
+//                 />
+//               </div>
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="password"
+//                   type="password"
+//                   placeholder="Password"
+//                   value={password}
+//                   onChange={(e) => setPassword(e.target.value)}
+//                 />
+//               </div>
+//             </div>
+//             <div className="w-full pt-4">
+//               <Button className="w-full" type="submit">
+//                 Login
+//               </Button>
+//             </div>
+//           </form>
+//           <div className="pt-4">
+//             <p className="text-sm text-center">
+//               Don't have an account? {" "}
+//               <Link href="/register" className="text-blue-500">
+//                 Register here
+//               </Link>
+//             </p>
+//           </div>
+//         </CardContent>
+//         <CardFooter className="flex justify-between">
+//           <Link href="/" className="w-full">
+//             <Button className="w-full" id="google" variant={"outline"}>
+//               <img
+//                 src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c1/Google_%22G%22_logo.svg/768px-Google_%22G%22_logo.svg.png"
+//                 className="w-6 h-6 mr-2"
+//                 alt="google logo"
+//               />
+//               Sign in with Google
+//             </Button>
+//           </Link>
+//         </CardFooter>
+//       </Card>
+//       <Card className="max-w-[350px] w-full mt-8">
+//         <CardHeader>
+//           <CardTitle className="text-3xl">Iniciar sesión :)</CardTitle>
+//           <CardDescription>
+//             Inicia sesión en tu cuenta o regístrate aquí.
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <form onSubmit={handleSubmit}>
+//             <div className="grid w-full items-center gap-4">
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="username"
+//                   type="text"
+//                   placeholder="Nombre de usuario"
+//                   value={username}
+//                   onChange={(e) => setUsername(e.target.value)}
+//                 />
+//               </div>
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="password"
+//                   type="password"
+//                   placeholder="Contraseña"
+//                   value={password}
+//                   onChange={(e) => setPassword(e.target.value)}
+//                 />
+//               </div>
+//             </div>
+//             <div className="w-full pt-4">
+//               <Button className="w-full" type="submit">
+//                 Iniciar sesión
+//               </Button>
+//             </div>
+//           </form>
+//         </CardContent>
+//       </Card>
+//       <Card className="max-w-[350px] w-full mt-8">
+//         <CardHeader>
+//           <CardTitle className="text-3xl">Accedi :)</CardTitle>
+//           <CardDescription>
+//             Accedi al tuo account o registrati qui.
+//           </CardDescription>
+//         </CardHeader>
+//         <CardContent>
+//           <form onSubmit={handleSubmit}>
+//             <div className="grid w-full items-center gap-4">
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="username"
+//                   type="text"
+//                   placeholder="Nome utente"
+//                   value={username}
+//                   onChange={(e) => setUsername(e.target.value)}
+//                 />
+//               </div>
+//               <div className="flex flex-col space-y-1.5">
+//                 <Input
+//                   id="password"
+//                   type="password"
+//                   placeholder="Password"
+//                   value={password}
+//                   onChange={(e) => setPassword(e.target.value)}
+//                 />
+//               </div>
+//             </div>
+//             <div className="w-full pt-4">
+//               <Button className="w-full" type="submit">
+//                 Accedi
+//               </Button>
+//             </div>
+//           </form>
+//         </CardContent>
+//       </Card>
+//     </div>
+//   );
+// }
+// 
+// export default Login;
+
 
 export default Login;
