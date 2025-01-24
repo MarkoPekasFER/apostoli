@@ -166,8 +166,8 @@ const GoogleMapParent = () => {
           <Marker
             key={index}
             position={{
-              lat: report.location.latitude,
-              lng: report.location.longitude,
+              lat: report?.location?.latitude,
+              lng: report?.location?.longitude,
             }}
             onClick={() => handleMarkerClick(report)}
             icon={disasterIcons[report.disasterType] || disasterIcons.DEFAULT}
