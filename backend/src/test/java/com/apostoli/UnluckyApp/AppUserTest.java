@@ -132,7 +132,7 @@ public class AppUserTest {
 
         AppUser user = new AppUser();
         user.setUsername("LeavingUser");
-        user.setEmail("NoOrgUser@mail.com");
+        user.setEmail("LeavingUser@mail.com");
         user.setOrganisation(oldOrganisation);
         user.setOrgRank(OrgRank.VOLUNTEER);
 
