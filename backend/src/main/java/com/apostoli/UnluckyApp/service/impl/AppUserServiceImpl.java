@@ -307,7 +307,7 @@ public class AppUserServiceImpl implements com.apostoli.UnluckyApp.service.AppUs
                 user.getId(),
                 user.getUsername(),
                 user.getEmail(),
-                user.getRoles().getLast().getName(),
+                user.getRoles().get(user.getRoles().size()-1).getName(),
                 user.getOrganisation().getName(),
                 user.getOrgRank().name()
         );
@@ -458,6 +458,10 @@ public class AppUserServiceImpl implements com.apostoli.UnluckyApp.service.AppUs
     }
 
 
+
+    public void banUser(String name, String username) {
+        throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED,"Ban user function not implemented");
+
     @Override
     public void addCity(String name, String city) {
 
@@ -485,5 +489,6 @@ public class AppUserServiceImpl implements com.apostoli.UnluckyApp.service.AppUs
 
         user.getCities().remove(city1);
         userRepository.save(user);
+
     }
 }

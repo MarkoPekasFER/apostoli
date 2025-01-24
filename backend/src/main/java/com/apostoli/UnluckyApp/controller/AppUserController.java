@@ -118,6 +118,12 @@ public class AppUserController {
         appUserServiceImpl.demoteRole(principal.getName(),username);
     }
 
+
+    @PostMapping("/banUser/{username}")
+    public void banUser(@PathVariable String username, Principal principal){
+        appUserServiceImpl.banUser(principal.getName(),username);
+    }
+
     @PostMapping("/addCity/{city}")
     public void addCity(@PathVariable String city, Principal principal){
         appUserServiceImpl.addCity(principal.getName(),city);
@@ -127,6 +133,5 @@ public class AppUserController {
     public void removeCity(@PathVariable String city, Principal principal){
         appUserServiceImpl.removeCity(principal.getName(),city);
     }
-
 
 }
