@@ -34,36 +34,36 @@ export default function Home() {
     setToken(token);
   }, []);
 
-  // useEffect(() => {
-  //   const fetchReports = async () => {
-  //     const token = localStorage.getItem('token');
-  //     if (!token) {
-  //       // Redirect to login if not authenticated
-  //       router?.push('/login');
-  //       return;
-  //     }
-  //     try {
-  //       const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/report/all', {
-  //         headers: {
-  //           'Authorization': `Bearer ${token}`,
-  //         },
-  //       });
-  //       if (response.ok) {
-  //         const data = await response.json();
-  //         setReports(data);
-  //       } else if (response.status === 401) {
-  //         // Token might have expired or is invalid
-  //         localStorage.removeItem('token');
-  //         router?.push('/login');
-  //       } else {
-  //         console.error('Failed to fetch reports');
-  //       }
-  //     } catch (error) {
-  //       console.error('An error occurred:', error);
-  //     }
-  //   };
-  //   fetchReports();
-  // }, [router]);
+   // useEffect(() => {
+   //   const fetchReports = async () => {
+   //     const token = localStorage.getItem('token');
+   //     if (!token) {
+   //       // Redirect to login if not authenticated
+   //       router?.push('/login');
+   //       return;
+   //     }
+   //     try {
+   //       const response = await fetch(process.env.NEXT_PUBLIC_API_URL+'/api/v1/report/all', {
+   //         headers: {
+   //           'Authorization': `Bearer ${token}`,
+   //         },
+   //       });
+   //       if (response.ok) {
+   //         const data = await response.json();
+   //         setReports(data);
+   //       } else if (response.status === 401) {
+   //         // Token might have expired or is invalid
+   //         localStorage.removeItem('token');
+   //         router?.push('/login');
+   //       } else {
+   //         console.error('Failed to fetch reports');
+   //       }
+   //     } catch (error) {
+   //       console.error('An error occurred:', error);
+   //     }
+   //   };
+   //   fetchReports();
+   // }, [router]);
 
   return (
     <div>
