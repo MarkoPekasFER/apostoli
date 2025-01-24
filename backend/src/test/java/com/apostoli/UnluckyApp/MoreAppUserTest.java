@@ -2,26 +2,24 @@ package com.apostoli.UnluckyApp;
 
 import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.email.EmailSender;
-import com.apostoli.UnluckyApp.model.entity.AppUser;
-import com.apostoli.UnluckyApp.model.entity.Location;
-import com.apostoli.UnluckyApp.model.entity.Organisation;
-import com.apostoli.UnluckyApp.model.entity.Report;
+import com.apostoli.UnluckyApp.model.entity.*;
 import com.apostoli.UnluckyApp.model.enums.DisasterType;
+import com.apostoli.UnluckyApp.model.enums.OrgRank;
 import com.apostoli.UnluckyApp.repository.AppUserRepository;
 import com.apostoli.UnluckyApp.repository.LocationRepository;
 import com.apostoli.UnluckyApp.repository.OrganisationRepository;
 import com.apostoli.UnluckyApp.repository.ReportRepository;
-import com.apostoli.UnluckyApp.service.impl.AppUserServiceImpl;
-import com.apostoli.UnluckyApp.service.impl.OrganisationServiceImpl;
-import com.apostoli.UnluckyApp.service.impl.ReportServiceImpl;
-import com.apostoli.UnluckyApp.service.impl.RoleServiceImpl;
+import com.apostoli.UnluckyApp.service.impl.*;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -34,8 +32,13 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 public class MoreAppUserTest {
 
+    private LocationServiceImpl locationService;
+
     @Mock
     private LocationRepository locationRepository;
+
+    @Mock
+    private AppUserRepository appUserRepository;
 
     @Mock
     private AppUserServiceImpl appUserService;
@@ -46,6 +49,9 @@ public class MoreAppUserTest {
     @Mock
     private ReportRepository reportRepository;
 
+    @Mock
+    private CityServiceImpl cityService;
+
     @Test
     public void testSubmitReport_InsideCroatia() {
 
@@ -53,7 +59,6 @@ public class MoreAppUserTest {
         user.setUsername("ValidUser");
 
         Location location = new Location();
-        location.setId(2L);
         location.setLatitude(45.791780);  //Zagreb
         location.setLongitude(15.954962);
 
@@ -63,11 +68,47 @@ public class MoreAppUserTest {
         report.setDisasterType(DisasterType.EARTHQUAKE);
         report.setLocation(location);
 
-        when(appUserService.fetchUserInfoByUsername(user.getUsername())).thenReturn(Optional.of(user));
+        when(locationRepository.findByLatitudeAndLongitude(anyDouble(), anyDouble())).thenReturn(location);
 
         reportService.submitReport(report, user.getUsername());
 
         verify(reportRepository, times(1)).save(any(Report.class));
     }
+
+    @BeforeEach
+    void setUp() {
+        locationService = new LocationServiceImpl(locationRepository, cityService);
+
+        reportService = new ReportServiceImpl(reportRepository, locationService, appUserService);
+    }
+
+    @Test
+    public void testSubmitReport_OutsideCroatia() {
+
+        AppUser user = new AppUser();
+        user.setUsername("ValidUser");
+
+        Location location = new Location();
+        location.setLatitude(48.806130);  // Paris
+        location.setLongitude(2.210209);
+
+        Report report = new Report();
+        report.setUser(user);
+        report.setDescription("Fire!");
+        report.setDisasterType(DisasterType.FIRE);
+        report.setLocation(location);
+
+        when(locationRepository.findByLatitudeAndLongitude(anyDouble(), anyDouble())).thenReturn(null);
+
+        ResponseStatusException exception = assertThrows(ResponseStatusException.class, () -> {
+            reportService.submitReport(report, user.getUsername());
+        });
+
+        assertEquals(HttpStatus.BAD_REQUEST, exception.getStatusCode());
+        assertEquals("Location is outside of Croatia", exception.getReason());
+
+        verify(reportRepository, never()).save(any(Report.class));
+    }
 }
+
 

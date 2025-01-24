@@ -5,6 +5,7 @@ import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.email.EmailSender;
 import com.apostoli.UnluckyApp.model.entity.*;
 import com.apostoli.UnluckyApp.model.enums.DisasterType;
+import com.apostoli.UnluckyApp.model.enums.OrgRank;
 import com.apostoli.UnluckyApp.repository.*;
 import com.apostoli.UnluckyApp.service.impl.*;
 import org.junit.jupiter.api.Test;
@@ -15,6 +16,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.security.Principal;
+import java.util.List;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -121,7 +123,37 @@ public class AppUserTest {
         verify(appUserRepository, times(1)).save(any(AppUser.class));
     }
 
+    @Test
+    public void testJoiningOrganisation_WithBeingInOrganisation() {
+        Organisation oldOrganisation = new Organisation();
+        oldOrganisation.setName("OldOrganisation");
+        oldOrganisation.setId(1L);
+        oldOrganisation.setDescription("Old organisation");
 
+        AppUser user = new AppUser();
+        user.setUsername("LeavingUser");
+        user.setEmail("NoOrgUser@mail.com");
+        user.setOrganisation(oldOrganisation);
+        user.setOrgRank(OrgRank.VOLUNTEER);
+
+        oldOrganisation.setMembers(List.of(user));
+
+        Organisation newOrganisation = new Organisation();
+        newOrganisation.setName("NewOrganisation");
+        newOrganisation.setId(2L);
+        newOrganisation.setDescription("New organisation");
+
+
+        when(organisationRepository.findByName(anyString())).thenReturn(Optional.of(newOrganisation));
+        when(appUserRepository.findByUsername(user.getUsername())).thenReturn(Optional.of(user));
+
+        Exception exception = assertThrows(ResponseStatusException.class, () -> {
+            appUserService.joinOrg(newOrganisation.getName(), user.getUsername());
+        });
+
+        assertEquals("403 FORBIDDEN \"User already in an organisation\"", exception.getMessage());
+
+    }
 
 
 }
