@@ -3,7 +3,6 @@ package com.apostoli.UnluckyApp.service.impl;
 
 import com.apostoli.UnluckyApp.model.entity.City;
 import com.apostoli.UnluckyApp.repository.CityRepository;
-import com.apostoli.UnluckyApp.service.CityService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
@@ -15,17 +14,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 @Service
-public class CityServiceImpl implements CityService {
+public class CityServiceImpl implements com.apostoli.UnluckyApp.service.CityService {
 
     private final CityRepository cityRepository;
     private List<City> cities = new ArrayList<>();
-
-
-    @Autowired
-    public CityServiceImpl(CityRepository cityRepository) {
-        this.cityRepository = cityRepository;
-        loadCities();
-    }
 
     private void loadCities() {
         try{
@@ -50,6 +42,13 @@ public class CityServiceImpl implements CityService {
         }
     }
 
+    @Autowired
+    public CityServiceImpl(CityRepository cityRepository) {
+        this.cityRepository = cityRepository;
+        loadCities();
+    }
+
+    @Override
     public List<City> getAllCities() {
         return cities;
     }

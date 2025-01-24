@@ -4,14 +4,13 @@ package com.apostoli.UnluckyApp.service.impl;
 import com.apostoli.UnluckyApp.model.entity.City;
 import com.apostoli.UnluckyApp.model.entity.Location;
 import com.apostoli.UnluckyApp.repository.LocationRepository;
-import com.apostoli.UnluckyApp.service.LocationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 @Service
-public class LocationServiceImpl implements LocationService {
+public class LocationServiceImpl implements com.apostoli.UnluckyApp.service.LocationService {
 
     private final LocationRepository locationRepository;
     private final CityServiceImpl cityService;
@@ -23,6 +22,7 @@ public class LocationServiceImpl implements LocationService {
         this.cityService = cityService;
     }
 
+    @Override
     public Location findOrCreateLocation(Location location) {
         Location existingLocation = locationRepository.findByLatitudeAndLongitude(location.getLatitude(), location.getLongitude());
         if (existingLocation != null) {
@@ -35,6 +35,7 @@ public class LocationServiceImpl implements LocationService {
     }
 
 
+    @Override
     public City findNearestCity(Location location){
         City nearestCity = null;
         double minDistance = Double.MAX_VALUE;
@@ -48,7 +49,7 @@ public class LocationServiceImpl implements LocationService {
         }
 
         // Provjera je li najbliži grad udaljen više od 30 km
-        if (minDistance > 35) {
+        if (minDistance > 31.755) {
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Location is outside of Croatia");
         }
 

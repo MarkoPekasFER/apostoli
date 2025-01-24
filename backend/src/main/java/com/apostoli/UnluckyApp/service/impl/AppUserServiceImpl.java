@@ -1,7 +1,7 @@
 package com.apostoli.UnluckyApp.service.impl;
 
-import com.apostoli.UnluckyApp.config.EmailToken;
-import com.apostoli.UnluckyApp.config.EmailTokenRepository;
+import com.apostoli.UnluckyApp.model.entity.EmailToken;
+import com.apostoli.UnluckyApp.repository.EmailTokenRepository;
 import com.apostoli.UnluckyApp.config.EmailTokenService;
 import com.apostoli.UnluckyApp.email.EmailSender;
 import com.apostoli.UnluckyApp.model.dto.AppUserDTO;
@@ -10,9 +10,6 @@ import com.apostoli.UnluckyApp.model.enums.DisasterType;
 import com.apostoli.UnluckyApp.model.enums.RoleType;
 import com.apostoli.UnluckyApp.repository.*;
 import com.apostoli.UnluckyApp.security.JwtService;
-import com.apostoli.UnluckyApp.service.AppUserService;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -20,15 +17,18 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.web.access.WebInvocationPrivilegeEvaluator;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Base64;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
-public class AppUserServiceImpl implements AppUserService {
+public class AppUserServiceImpl implements com.apostoli.UnluckyApp.service.AppUserService {
 
     private final AppUserRepository userRepository;
     private final ReportRepository reportRepository;
@@ -48,15 +48,16 @@ public class AppUserServiceImpl implements AppUserService {
     private final OrganisationRepository organisationRepository;
     private final LocationRepository locationRepository;
     private final CityRepository cityRepository;
+    private final WebInvocationPrivilegeEvaluator privilegeEvaluator;
 
-   // @Value("${link_za_email_testing}")
-  //  String link; //samo za testiranje
+  //  @Value("${link_za_email_testing}")
+  // String link; //samo za testiranje
 
     @Value("${link_za_email_prod}")
     String link; // za prod
 
     @Autowired
-    public AppUserServiceImpl(AppUserRepository userRepository, ReportRepository reportRepository, JwtService jwtService, EmailTokenService emailTokenService, EmailSender emailSender, AuthenticationManager authManager, RoleServiceImpl roleService, EmailTokenRepository emailTokenRepository, OrganisationRepository organisationRepository, LocationRepository locationRepository, CityRepository cityRepository) {
+    public AppUserServiceImpl(AppUserRepository userRepository, ReportRepository reportRepository, JwtService jwtService, EmailTokenService emailTokenService, EmailSender emailSender, AuthenticationManager authManager, RoleServiceImpl roleService, EmailTokenRepository emailTokenRepository, OrganisationRepository organisationRepository, LocationRepository locationRepository, CityRepository cityRepository, WebInvocationPrivilegeEvaluator privilegeEvaluator) {
         this.userRepository = userRepository;
         this.reportRepository = reportRepository;
         this.jwtService = jwtService;
@@ -69,8 +70,10 @@ public class AppUserServiceImpl implements AppUserService {
         this.organisationRepository = organisationRepository;
         this.locationRepository = locationRepository;
         this.cityRepository = cityRepository;
+        this.privilegeEvaluator = privilegeEvaluator;
     }
 
+    @Override
     public void registerUser(AppUser user) {
 
         long startTime = System.currentTimeMillis();
@@ -103,7 +106,8 @@ public class AppUserServiceImpl implements AppUserService {
         link += token;
         emailSender.send(
                 user.getEmail(),
-                buildEmail(user.getUsername(), link)
+                buildEmail(user.getUsername(), link),
+                "Confirm your email"
         );
 
       //  long afterEmailSendTime = System.currentTimeMillis();
@@ -113,7 +117,8 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
-    public void joinOrg(String orgName,String username){
+    @Override
+    public void joinOrg(String orgName, String username){
 
         Organisation org = organisationRepository.findByName(orgName).orElse(null);
         AppUser user = userRepository.findByUsername(username).orElse(null);
@@ -130,7 +135,8 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
-    public void leaveOrg(String orgName,String username){
+    @Override
+    public void leaveOrg(String orgName, String username){
 
         Organisation org = organisationRepository.findByName(orgName).orElse(null);
         AppUser user = userRepository.findByUsername(username).orElse(null);
@@ -149,7 +155,36 @@ public class AppUserServiceImpl implements AppUserService {
         }
     }
 
+    public void notifyUsersByCity(String cityName, String disasterDetails,Long reportId) {
 
+        List<AppUser> users = userRepository.findByCities_Name(cityName);
+        Report report = reportRepository.findById(reportId).orElse(null);
+
+        if (report == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Report not found");
+        }
+
+        System.out.println("City name is: " + cityName);
+        System.out.println("Users found: " + users.size());
+
+        for (AppUser user : users) {
+            String emailContent = notificationBuilder(
+                    user.getUsername(),
+                    cityName,
+                    report.getDisasterType().name(),
+                    report.getDescription(),
+                    report.getReportDateTime(),
+                    user.getEmail(),
+                    report.getPhotos()
+            );
+            emailSender.send(user.getEmail(), emailContent,"Disaster Alert");
+        }
+
+
+    }
+
+
+    @Override
     public List<AppUserDTO> getAllUsers() {
             List<AppUser> users = userRepository.findAll();
             return users.stream()
@@ -157,18 +192,22 @@ public class AppUserServiceImpl implements AppUserService {
                     .collect(Collectors.toList());
     }
 
+    @Override
     public Optional<AppUser> fetchUserInfoByUsername(String username) {
         return userRepository.findByUsername(username);
     }
 
+    @Override
     public Optional<AppUser> fetchUserInfoByEmail(String username) {
         return userRepository.findByEmail(username);
     }
 
+    @Override
     public List<Report> fetchUserReportsByUsername(AppUser user) {
         return reportRepository.findByUser(user);
     }
 
+    @Override
     public String verify(AppUser user) {
         Authentication authentication = authManager.authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         if (authentication.isAuthenticated()) {
@@ -179,16 +218,19 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
 
+    @Override
     public int getStatsByCity(String city){
         City city1 = cityRepository.findByName(city).orElse(null);
         return locationRepository.findByCity(city1).stream().toList().size();
     }
 
+    @Override
     public int getStatsByDisasterType(String disasterType){
         DisasterType disasterType1 = DisasterType.valueOf(disasterType);
         return reportRepository.findByDisasterType(disasterType1).stream().toList().size();
     }
 
+    @Override
     public int getStatsByCityAndDisasterType(String city, String disasterType) {
         City city1 = cityRepository.findByName(city).orElse(null);
         DisasterType disasterType1 = DisasterType.valueOf(disasterType);
@@ -198,10 +240,10 @@ public class AppUserServiceImpl implements AppUserService {
                 .collect(Collectors.toSet()).size();
     }
 
-    public void promoteRole(String superior, String target ){
+    @Override
+    public void promoteRole(String superior, String target){
         AppUser superiorUser = userRepository.findByUsername(superior).orElse(null);
         AppUser targetUser = userRepository.findByUsername(target).orElse(null);
-
 
 
         if(superiorUser==null || targetUser==null){
@@ -231,7 +273,8 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
-    public void demoteRole(String superior, String target ){
+    @Override
+    public void demoteRole(String superior, String target){
         AppUser superiorUser = userRepository.findByUsername(superior).orElse(null);
         AppUser targetUser = userRepository.findByUsername(target).orElse(null);
 
@@ -259,9 +302,6 @@ public class AppUserServiceImpl implements AppUserService {
 
     }
 
-
-
-
     private AppUserDTO mapToDTO(AppUser user) {
         return new AppUserDTO(
                 user.getId(),
@@ -272,6 +312,81 @@ public class AppUserServiceImpl implements AppUserService {
                 user.getOrgRank().name()
         );
     }
+
+
+
+    private String notificationBuilder(
+            String username,
+            String city,
+            String disasterType,
+            String description,
+            LocalDateTime reportDateTime, // <-- Use the date/time from the report
+            String email,
+            List<Photo> images)
+    {
+        // Format the date/time in a nicer format, e.g. "2025-01-23 14:30:45"
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        String formattedTime = (reportDateTime != null)
+                ? reportDateTime.format(formatter)
+                : "N/A";
+
+        // Build a block of HTML that represents the images inlined (base64).
+        StringBuilder imagesHtml = new StringBuilder();
+        if (images != null && !images.isEmpty()) {
+            imagesHtml.append("<p style=\"font-weight: bold; margin: 15px 0 5px;\">Pictures:</p>");
+            for (int i = 0; i < images.size(); i++) {
+                Photo photo = images.get(i);
+
+                // Fallback to "image/png" if type is missing
+                String mimeType = (photo.getType() == null || photo.getType().isEmpty())
+                        ? "image/png"
+                        : photo.getType();
+
+                // Convert raw bytes to a base64-encoded string
+                String base64 = Base64.getEncoder().encodeToString(photo.getData());
+
+                imagesHtml.append("<div style=\"margin-bottom: 10px;\">")
+                        .append("  <img src=\"data:")
+                        .append(mimeType)
+                        .append(";base64,")
+                        .append(base64)
+                        .append("\" alt=\"")
+                        .append(photo.getName() == null ? ("Image_" + (i + 1)) : photo.getName())
+                        .append("\" style=\"max-width: 100%; height: auto; border: 1px solid #ccc;\"/>")
+                        .append("</div>");
+            }
+        } else {
+            imagesHtml.append("<p>No pictures provided.</p>");
+        }
+
+        // Now build the final HTML email body
+        return "<div style=\"font-family: Arial, sans-serif; color: #333; padding: 20px;\">"
+                + "  <table style=\"width: 100%; max-width: 600px; margin: 0 auto; border-collapse: collapse;\">"
+                + "    <tr>"
+                + "      <td style=\"padding: 20px; background-color: #f8f8f8;\">"
+                + "        <h2 style=\"margin-top: 0;\">Hello, " + username + "!</h2>"
+                + "        <p style=\"margin: 0;\">"
+                + "          There has been a <strong>" + disasterType + "</strong> in <strong>" + city + "</strong>."
+                + "          Please follow caution."
+                + "        </p>"
+                + "      </td>"
+                + "    </tr>"
+                + "    <tr>"
+                + "      <td style=\"padding: 20px;\">"
+                + "        <p><strong>Time:</strong> " + formattedTime + "</p>"
+                + "        <p><strong>Description:</strong> " + description + "</p>"
+                +          imagesHtml
+                + "      </td>"
+                + "    </tr>"
+                + "    <tr>"
+                + "      <td style=\"padding: 20px; background-color: #f8f8f8; text-align: center;\">"
+                + "        <p style=\"margin: 0;\">Sent to: " + email + "</p>"
+                + "      </td>"
+                + "    </tr>"
+                + "  </table>"
+                + "</div>";
+    }
+
 
     private String buildEmail(String username, String link) {
         return "<div style=\"font-family:Helvetica,Arial,sans-serif;font-size:16px;margin:0;color:#0b0c0c\">\n" +
@@ -343,7 +458,37 @@ public class AppUserServiceImpl implements AppUserService {
     }
 
 
+
     public void banUser(String name, String username) {
         throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED,"Ban user function not implemented");
+
+    @Override
+    public void addCity(String name, String city) {
+
+        AppUser user = userRepository.findByUsername(name).orElse(null);
+        City city1 = cityRepository.findByName(city).orElse(null);
+
+        if (user == null || city1 == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either user or city not found");
+        }
+
+        user.getCities().add(city1);
+        userRepository.save(user);
+
+    }
+
+
+    @Override
+    public void removeCity(String name, String city) {
+        AppUser user = userRepository.findByUsername(name).orElse(null);
+        City city1 = cityRepository.findByName(city).orElse(null);
+
+        if (user == null || city1 == null) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Either user or city not found");
+        }
+
+        user.getCities().remove(city1);
+        userRepository.save(user);
+
     }
 }
