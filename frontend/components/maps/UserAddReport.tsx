@@ -34,7 +34,8 @@ function UserAddReport() {
       longitude: 0,
     },
   });
-  const [isDialogOpen, setIsDialogOpen] = useState(false);
+  const [files, setFiles] = useState<FileList | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(true);
   const router = useRouter();
 
   // Map settings
@@ -93,29 +94,45 @@ function UserAddReport() {
     e.preventDefault();
     const token = localStorage.getItem("token");
     if (!token) {
-      // Redirect to login if not authenticated
       router?.push("/login");
       return;
     }
+
+    const formData = new FormData();
+    const reportData = {
+      description: form.description,
+      disasterType: form.disasterType,
+      location: form.location,
+    };
+
+    formData.append(
+      "report",
+      new Blob([JSON.stringify(reportData)], { type: "application/json" })
+    );
+
+    if (files) {
+      Array.from(files).forEach((file) => {
+        formData.append("files", file);
+      });
+    }
+
     try {
       const response = await fetch(
         process.env.NEXT_PUBLIC_API_URL + "/api/v1/report/submit",
         {
           method: "POST",
           headers: {
-            "Content-Type": "application/json",
             Authorization: `Bearer ${token}`,
           },
-          body: JSON.stringify(form),
+          body: formData,
         }
       );
+
       if (response.ok) {
         alert("Nesreća je uspješno prijavljena");
         setIsDialogOpen(false);
-        // Optionally, refresh the page to show the new report
         router?.push("/");
       } else if (response.status === 401) {
-        // Token might have expired or is invalid
         localStorage.removeItem("token");
         router?.push("/login");
       } else {
@@ -132,7 +149,6 @@ function UserAddReport() {
     }
   };
 
-  // Handle map click to select location
   const handleMapClick = (event: google.maps.MapMouseEvent) => {
     if (event.latLng) {
       const lat = event.latLng.lat();
@@ -150,11 +166,14 @@ function UserAddReport() {
   };
 
   return (
-    <Dialog open={true} onOpenChange={() => {
-      router?.back();
-    }}>
+    <Dialog
+      open={isDialogOpen}
+      onOpenChange={(open) => {
+        router?.back();
+      }}
+    >
       <DialogTrigger className="p-4 bg-white text-neutral-900 shadow-2xl rounded-full">
-        {/* <Plus /> */}
+        <Plus />
       </DialogTrigger>
       <DialogContent className="bg-white text-neutral-900 dark:bg-gray-900 dark:text-white dark:border-white">
         <form onSubmit={handleSubmit}>
@@ -192,6 +211,15 @@ function UserAddReport() {
                   </GoogleMap>
                 </LoadScript>
               </div>
+            </div>
+            <div className="flex flex-col space-y-1.5">
+              <Label htmlFor="files">Priloži fotografije</Label>
+              <Input
+                id="files"
+                type="file"
+                multiple
+                onChange={(e) => setFiles(e.target.files)}
+              />
             </div>
             <div className="grid w-full items-center gap-4 pb-4">
               <div className="flex flex-col space-y-1.5">

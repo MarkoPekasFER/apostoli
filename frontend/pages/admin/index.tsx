@@ -1,3 +1,4 @@
+import DisasterInstructions from "@/components/DisasterAdmin";
 import {
   containerStyle,
   defaultMapOptions,
@@ -12,7 +13,7 @@ import { useEffect, useState } from "react";
 export type DisasterReport = {
   id: number;
   disasterType: "TORNADO" | "FLOOD" | "EARTHQUAKE" | "FIRE" | string; // Extend as needed
-  location: {
+  locationName: {
     id: number;
     address: string | null;
     latitude: number;
@@ -27,7 +28,7 @@ export type DisasterReport = {
   };
   reportDateTime: string; // ISO 8601 format
   description: string;
-  status: "PENDING" | "RESOLVED" | "IN_PROGRESS" | string; // Extend as needed
+  status: "PENDING" | "RESOLVED" | "ACTIVE" | string; // Extend as needed
   user: {
     id: number;
     username: string;
@@ -75,7 +76,7 @@ export default function Admin() {
         <Tabs defaultValue="reports" className="w-full">
           <TabsList className="grid w-full grid-cols-2">
             <TabsTrigger value="reports">Reports</TabsTrigger>
-            <TabsTrigger value="other">Other</TabsTrigger>
+            <TabsTrigger value="other">Instructions</TabsTrigger>
           </TabsList>
           <TabsContent value="reports" className="grid gap-2">
             {reports.sort((a, b) => {
@@ -115,8 +116,8 @@ export default function Admin() {
                         height: "100%",
                       }}
                       center={{
-                        lat: report.location.latitude,
-                        lng: report.location.longitude,
+                        lat: report?.locationName?.latitude,
+                        lng: report?.locationName?.longitude,
                       }}
                       zoom={10}
                       options={defaultMapOptions}
@@ -124,8 +125,8 @@ export default function Admin() {
                       <Marker
                         key={loading ? "loading" : "loaded"}
                         position={{
-                          lat: report.location.latitude,
-                          lng: report.location.longitude,
+                          lat: report?.locationName?.latitude,
+                          lng: report?.locationName?.longitude,
                         }}
                         icon={
                           disasterIcons[report.disasterType] ||
@@ -140,7 +141,7 @@ export default function Admin() {
                   <p>{report.reportDateTime}</p>
                 </div>
                 <div className={`flex gap-2
-                  ${report.status === "APPROVED" ? "flex" : "hidden"}
+                  ${report.status === "ACTIVE" ? "flex" : "hidden"}
                   `}>
                     <Button 
                     onClick={() => {
@@ -217,7 +218,9 @@ export default function Admin() {
               </div>
             ))}
           </TabsContent>
-          <TabsContent value="other">Change your password here.</TabsContent>
+          <TabsContent value="other">
+            <DisasterInstructions />
+          </TabsContent>
         </Tabs>
       </div>
     </div>
