@@ -5,6 +5,8 @@ Ovaj projekt je rezultat timskog rada u sklopu projektnog zadatka kolegija [Prog
 
 Deployment se nalazi na [apostoli.markopekas.com](https://apostoli.markopekas.com)
 
+API dokumentacija nalazi se na [apostoli-api.com](https://apostoli-api.markopekas.com/swagger-ui/index.html#/)
+
 Ovaj projekt će omogućiti bolju komunikaciju između građana i hitnih službi te poboljšati brzinu reakcije u kriznim situacijama. Aplikacija će osigurati pravovremene informacije i koordinaciju akcija u stvarnom vremenu.
 
 ## Funkcijski zahtjevi
